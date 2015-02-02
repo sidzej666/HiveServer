@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: hiveGrail
+Bundle-SymbolicName: hive
+Bundle-Version: 1.0.0.qualifier
+Export-Package: com.pkstudio.hive,
+ com.pkstudio.hive.games,
+ org.gradle,
+ stories
