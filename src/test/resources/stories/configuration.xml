@@ -34,17 +34,9 @@
 		<property name="formats">
 			<list>
 				<value>HTML_TEMPLATE</value>
+				<value>CONSOLE</value>
 			</list>
 		</property>
-		<property name="relativeDirectory" value="../build/jbehave"/>
-		<property name="viewResources" ref="viewResources"/> 
+		<property name="relativeDirectory" value="../build/jbehave"/> 
 	</bean>
- 
- 	<bean id="viewResources" class="java.utils.Properties">
- 		<constructor-arg>
-        <props>
-            <prop key="decorateNonHtml">false</prop>
-        </props>
-    </constructor-arg>
- 	</bean>
 </beans>
