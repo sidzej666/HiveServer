@@ -7,3 +7,4 @@ Export-Package: com.pkstudio.hive,
  com.pkstudio.hive.games,
  org.gradle,
  stories
+Import-Package: com.pkstudio.hive.games

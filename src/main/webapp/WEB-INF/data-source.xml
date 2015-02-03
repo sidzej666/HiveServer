@@ -24,13 +24,14 @@
 
 	<context:property-placeholder location="/WEB-INF/jdbc.properties" />
 
-	<jdbc:initialize-database data-source="dataSource">
+	<jdbc:initialize-database data-source="dataSource" enabled="false">
 		<jdbc:script location="classpath:db/db-schema.sql" />
 		<jdbc:script location="classpath:db/db-data.sql" />
 	</jdbc:initialize-database>
 
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="com.pkstudio" />
 		<property name="hibernateProperties">
          <props>
             <prop key="hibernate.dialect">${hibernate.dialect}</prop>
@@ -39,6 +40,7 @@
       </property>
 	</bean>
 
+	<context:component-scan base-package="com.pkstudio"/>
 	<tx:annotation-driven />
 	
 	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

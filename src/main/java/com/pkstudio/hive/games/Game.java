@@ -1,6 +1,7 @@
 package com.pkstudio.hive.games;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -8,6 +9,7 @@ import javax.persistence.Table;
 import com.pkstudio.generic.dao.GenericId;
 import com.pkstudio.hive.players.Player;
 
+@Entity
 @Table(name = "games")
 public class Game extends GenericId {
 		

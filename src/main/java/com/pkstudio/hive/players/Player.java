@@ -1,9 +1,11 @@
 package com.pkstudio.hive.players;
 
+import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.pkstudio.generic.dao.GenericId;
 
+@Entity
 @Table(name = "players")
 public class Player extends GenericId {
 	private String name;

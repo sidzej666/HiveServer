@@ -1,16 +1,13 @@
 package com.pkstudio.generic.dao;
 
 import static javax.persistence.GenerationType.IDENTITY;
-import static javax.persistence.InheritanceType.SINGLE_TABLE;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
+import javax.persistence.MappedSuperclass;
 
-@Entity
-@Inheritance(strategy = SINGLE_TABLE)
+@MappedSuperclass
 public class GenericId {
 	
 	@Id
