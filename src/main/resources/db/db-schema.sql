@@ -1,7 +1,17 @@
+CREATE TABLE players (
+	id INT NOT NULL AUTO_INCREMENT,
+	name VARCHAR(20) NOT NULL,
+	password_hash VARCHAR(50) NOT NULL,
+	hash_seed VARCHAR(50) NOT NULL,
+	PRIMARY KEY(id)
+);
+
 CREATE TABLE games (
-	id INT NOT NULL,
+	id INT NOT NULL AUTO_INCREMENT,
 	player_one INT NOT NULL,
 	player_two INT,
 	name VARCHAR(50),
-	PRIMARY KEY (id)	
-)
+	PRIMARY KEY(id),
+	CONSTRAINT FOREIGN KEY(player_one) REFERENCES players(id),
+	CONSTRAINT FOREIGN KEY(player_two) REFERENCES players(id)
+);

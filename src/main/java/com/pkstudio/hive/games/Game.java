@@ -1,10 +1,18 @@
 package com.pkstudio.hive.games;
 
+
 public class Game {
+	private int id;
 	private String playerOne;
 	private String playerTwo;
 	private String name;
 	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getPlayerOne() {
 		return playerOne;
 	}
