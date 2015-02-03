@@ -8,10 +8,10 @@ CREATE TABLE players (
 
 CREATE TABLE games (
 	id INT NOT NULL AUTO_INCREMENT,
-	player_one INT NOT NULL,
-	player_two INT,
-	name VARCHAR(50),
+	player_one_id INT NOT NULL,
+	player_two_id INT NULL,
+	name VARCHAR(50) NOT NULL,
 	PRIMARY KEY(id),
-	CONSTRAINT FOREIGN KEY(player_one) REFERENCES players(id),
-	CONSTRAINT FOREIGN KEY(player_two) REFERENCES players(id)
+	CONSTRAINT FOREIGN KEY(player_one_id) REFERENCES players(id),
+	CONSTRAINT FOREIGN KEY(player_two_id) REFERENCES players(id)
 );

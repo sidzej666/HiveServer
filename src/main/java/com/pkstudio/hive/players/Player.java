@@ -1,17 +1,15 @@
 package com.pkstudio.hive.players;
 
-public class Player {
-	private int id;
+import javax.persistence.Table;
+
+import com.pkstudio.generic.dao.GenericId;
+
+@Table(name = "players")
+public class Player extends GenericId {
 	private String name;
 	private String password_hash;
 	private String hash_seed;
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public String getName() {
 		return name;
 	}
