@@ -1,5 +1,6 @@
 package com.pkstudio.hive.players;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -8,9 +9,14 @@ import com.pkstudio.generic.dao.GenericId;
 @Entity
 @Table(name = "players")
 public class Player extends GenericId {
+	@Column(name = "name", nullable = false, unique = true)
 	private String name;
-	private String password_hash;
-	private String hash_seed;
+	@Column(name = "email", nullable = false, unique = true)
+	private String email;
+	@Column(name = "password_hash", nullable = false)
+	private String passwordHash;
+	@Column(name = "hash_seed", nullable = false)
+	private String hashSeed;
 	
 	public String getName() {
 		return name;
@@ -18,16 +24,22 @@ public class Player extends GenericId {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getPassword_hash() {
-		return password_hash;
+	public String getPasswordHash() {
+		return passwordHash;
 	}
-	public void setPassword_hash(String password_hash) {
-		this.password_hash = password_hash;
+	public void setPassword_hash(String passwordHash) {
+		this.passwordHash = passwordHash;
 	}
-	public String getHash_seed() {
-		return hash_seed;
+	public String getHashSeed() {
+		return hashSeed;
 	}
-	public void setHash_seed(String hash_seed) {
-		this.hash_seed = hash_seed;
+	public void setHash_seed(String hashSeed) {
+		this.hashSeed = hashSeed;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

@@ -1,5 +1,7 @@
 package com.pkstudio.hive.games;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
@@ -16,8 +18,14 @@ public class GameServiceImpl implements GameService {
 	}
 
 	@Override
-	public Game getGameById(int id) {
+	public GameDto getGameById(int id) {
 		Game game = gamesDao.getById(id);
-		return game;
+		return new GameDto(game);
+	}
+
+	@Override
+	public List<GameDto> getGamesList() {
+		List<Game> games = gamesDao.getAll();
+		return GameDto.fromGamesList(games);
 	}
 }

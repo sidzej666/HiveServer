@@ -1,5 +1,8 @@
 package com.pkstudio.hive.games;
 
+import java.util.List;
+
 public interface GameService {
-	public Game getGameById(int id);
+	public List<GameDto> getGamesList();
+	public GameDto getGameById(int id);
 }

@@ -1,6 +1,8 @@
 package com.pkstudio.hive.games;
 
+import com.pkstudio.generic.dao.GenericDao;
 
-public interface GamesDao {
-	public Game getById(int id);
+
+public interface GamesDao extends GenericDao<Game> {
+	
 }

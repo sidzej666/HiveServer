@@ -23,15 +23,12 @@ public class GameController {
 	}
 	
 	@RequestMapping(method = GET)
-	public List<Game> getGames() {
-		List<Game> games = new ArrayList<Game>();
-		games.add(new Game());
-		games.add(new Game());
-		return games;
+	public List<GameDto> getGames() {
+		return gameService.getGamesList();
 	}
 	
 	@RequestMapping(value = "/{id}", method = GET)
-	public Game getGame(@PathVariable int id) {
+	public GameDto getGame(@PathVariable int id) {
 		return gameService.getGameById(id);
 	}
 }

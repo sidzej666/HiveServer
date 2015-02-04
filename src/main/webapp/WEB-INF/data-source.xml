@@ -24,7 +24,7 @@
 
 	<context:property-placeholder location="/WEB-INF/jdbc.properties" />
 
-	<jdbc:initialize-database data-source="dataSource" enabled="false">
+	<jdbc:initialize-database data-source="dataSource" enabled="true" ignore-failures="ALL">
 		<jdbc:script location="classpath:db/db-schema.sql" />
 		<jdbc:script location="classpath:db/db-data.sql" />
 	</jdbc:initialize-database>

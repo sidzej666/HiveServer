@@ -24,6 +24,9 @@ public class Game extends GenericId {
 	@Column(name = "name", unique = false, nullable = true)
 	private String name;
 	
+	@Column(name = "password", nullable = true)
+	private String password;
+	
 	public Player getPlayerOne() {
 		return playerOne;
 	}
@@ -41,5 +44,11 @@ public class Game extends GenericId {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
