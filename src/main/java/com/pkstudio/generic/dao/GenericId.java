@@ -13,13 +13,13 @@ public class GenericId {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", nullable = false, unique = true)
-	private int id;
+	private Integer id;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 }

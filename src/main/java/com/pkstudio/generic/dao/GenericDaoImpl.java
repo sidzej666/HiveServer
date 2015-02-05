@@ -16,12 +16,8 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 	private SessionFactory sessionFactory;
 	private final Class<T> typeParameterClass;
 	
-	public GenericDaoImpl(Class<T> typeParameterClass) {
+	public GenericDaoImpl(Class<T> typeParameterClass, SessionFactory sessionFactory) {
 		this.typeParameterClass = typeParameterClass;
-	}
-	
-	@Inject
-	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 	

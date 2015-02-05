@@ -12,6 +12,6 @@ public class GamesDaoImpl extends GenericDaoImpl<Game> implements GamesDao {
 	
 	@Inject
 	public GamesDaoImpl(SessionFactory sessionFactory) {
-		super(Game.class);
+		super(Game.class, sessionFactory);
 	}
 }

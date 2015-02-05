@@ -10,11 +10,15 @@ import com.pkstudio.hive.players.PlayerDto;
 
 @JsonInclude(value = ALWAYS)
 public class GameDto {
-	private int id;
+	private Integer id;
 	private String name;
 	private boolean isPrivate;
 	private PlayerDto playerOne;
 	private PlayerDto playerTwo;
+	
+	public GameDto() {
+		
+	}
 	
 	public GameDto(Game game) {
 		this.setId(game.getId());
@@ -46,10 +50,10 @@ public class GameDto {
 	public void setPrivate(boolean isPrivate) {
 		this.isPrivate = isPrivate;
 	}
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
