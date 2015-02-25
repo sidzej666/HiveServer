@@ -6,4 +6,5 @@
 
 	<import resource="mvc-dispatcher-servlet.xml"/>
 	<import resource="data-source.xml"/>
+	<import resource="spring-security.xml"/>
 </beans>

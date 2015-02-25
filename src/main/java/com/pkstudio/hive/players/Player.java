@@ -18,6 +18,10 @@ public class Player extends GenericId {
 	@Column(name = "hash_seed", nullable = false)
 	private String hashSeed;
 	
+	public Player() {
+		
+	}
+	
 	public Player(PlayerDto playerDto) {
 		this.name = playerDto.getName();
 		this.email = playerDto.getEmail();

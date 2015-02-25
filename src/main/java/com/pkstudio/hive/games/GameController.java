@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/games")
+@RequestMapping(value = "/rest/games")
 public class GameController {
 
 	private final GameService gameService;

@@ -1,0 +1,36 @@
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+		
+	<global-method-security secured-annotations="enabled" />
+	
+	<!-- Security configuration for REST services. 
+		 http://www.networkedassets.com/configuring-spring-security-for-a-restful-web-services/
+	-->
+	<http pattern="/rest/**" authentication-manager-ref="authenticationManager" 
+		entry-point-ref="restServicesEntryPoint" create-session="stateless">
+		<intercept-url pattern="/rest/**" access="ROLE_PLAYER" requires-channel="https" />
+		<http-basic />
+	</http>
+	<!-- Entry point for REST service. -->
+	<beans:bean id="restServicesEntryPoint" class="com.pkstudio.security.RestAuthenticationEntryPoint" />
+	
+	<!-- Security configuration for other resources. Use login form. -->	
+	<http use-expressions="true" create-session="stateless">
+		<intercept-url pattern="/**" access="permitAll()" />
+		<form-login />
+	</http>
+	<!-- Authentication manager. -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider>
+	    	<jdbc-user-service id="userService" data-source-ref="dataSource"
+				users-by-username-query="select name, password_hash, 'true' from players where name=?"
+				authorities-by-username-query="select name, 'ROLE_PLAYER' from players where name=?" />
+	  	</authentication-provider>
+	</authentication-manager>
+	
+</beans:beans>
