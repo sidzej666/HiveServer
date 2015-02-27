@@ -19,6 +19,6 @@ public class WelcomePageSteps {
 	
 	@Then("the message should be <message>")
 	public void theMessageShouldBe(@Named("message") String message) {
-		assertThat("Hello " + name, is(message));
+		assertThat("Hello aaa" + name, is(message));
 	}
 }

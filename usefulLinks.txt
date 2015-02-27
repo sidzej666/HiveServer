@@ -1,0 +1,9 @@
+https://blog.apigee.com/detail/restful_api_design_what_about_errors
+https://stormpath.com/blog/spring-mvc-rest-exception-handling-best-practices-part-1/
+https://stormpath.com/blog/spring-mvc-rest-exception-handling-best-practices-part-2/
+http://stackoverflow.com/questions/2066946/trigger-404-in-spring-mvc-controller
+https://malalanayake.wordpress.com/2014/06/27/spring-security-on-rest-api/
+http://java.dzone.com/articles/secure-rest-services-using
+https://stormpath.com/blog/secure-your-rest-api-right-way/
+http://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc
+http://stackoverflow.com/questions/9593409/convert-pojo-to-json

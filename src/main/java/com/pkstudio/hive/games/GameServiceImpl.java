@@ -20,6 +20,9 @@ public class GameServiceImpl implements GameService {
 	@Override
 	public GameDto getGameById(int id) {
 		Game game = gamesDao.getById(id);
+		if (game == null) {
+			return null;
+		}
 		return new GameDto(game);
 	}
 

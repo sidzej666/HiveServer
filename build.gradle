@@ -41,6 +41,15 @@ dependencies {
 	//include in compile only, exclude in the war
 	providedCompile 'javax.servlet:servlet-api:2.5'
 	testCompile 'junit:junit:4.11'
-	compile 'org.jbehave:jbehave-core:3.9.5'
-	compile 'org.jbehave:jbehave-spring:3.9.5'
+	testCompile 'org.jbehave:jbehave-core:3.9.5'
+	testCompile 'org.jbehave:jbehave-spring:3.9.5'
+	compile 'com.google.code.gson:gson:1.7.1'
+}
+
+test {
+	exclude '**/jbehave/**'
+}
+
+task acceptanceTest(type: Test) {
+	
 }

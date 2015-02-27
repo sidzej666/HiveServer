@@ -6,20 +6,20 @@
 		http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 		
-	<global-method-security secured-annotations="enabled" />
+	<global-method-security secured-annotations="enabled" pre-post-annotations="enabled"/>
 	
 	<!-- Security configuration for REST services. 
 		 http://www.networkedassets.com/configuring-spring-security-for-a-restful-web-services/
 	-->
-	<http pattern="/rest/**" authentication-manager-ref="authenticationManager" 
-		entry-point-ref="restServicesEntryPoint" create-session="stateless">
-		<intercept-url pattern="/rest/**" access="ROLE_PLAYER" requires-channel="https" />
-		<http-basic />
+	<http pattern="/rest/**" authentication-manager-ref="authenticationManager"
+		create-session="stateless" use-expressions="true" >
+		<intercept-url pattern="/rest/**" requires-channel="https" access="isAuthenticated()" />
+		<http-basic entry-point-ref="restServicesEntryPoint" />
 	</http>
 	<!-- Entry point for REST service. -->
 	<beans:bean id="restServicesEntryPoint" class="com.pkstudio.security.RestAuthenticationEntryPoint" />
 	
-	<!-- Security configuration for other resources. Use login form. -->	
+	<!-- Security configuration for other resources. Use login form. -->
 	<http use-expressions="true" create-session="stateless">
 		<intercept-url pattern="/**" access="permitAll()" />
 		<form-login />
