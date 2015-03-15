@@ -17,7 +17,7 @@
 		<http-basic entry-point-ref="restServicesEntryPoint" />
 	</http>
 	<!-- Entry point for REST service. -->
-	<beans:bean id="restServicesEntryPoint" class="com.pkstudio.security.RestAuthenticationEntryPoint" />
+	<beans:bean id="restServicesEntryPoint" class="com.pkstudio.hive.exceptions.rest.RestAuthenticationEntryPoint" />
 	
 	<!-- Security configuration for other resources. Use login form. -->
 	<http use-expressions="true" create-session="stateless">
