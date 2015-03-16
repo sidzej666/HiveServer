@@ -7,3 +7,8 @@ http://java.dzone.com/articles/secure-rest-services-using
 https://stormpath.com/blog/secure-your-rest-api-right-way/
 http://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc
 http://stackoverflow.com/questions/9593409/convert-pojo-to-json
+
+http://blog.jdriven.com/2014/10/stateless-spring-security-part-1-stateless-csrf-protection/
+http://blog.jdriven.com/2014/10/stateless-spring-security-part-2-stateless-authentication/
+http://thejackalofjavascript.com/architecting-a-restful-node-js-app/
+http://getbootstrap.com/components/
