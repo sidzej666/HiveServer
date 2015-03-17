@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -34,10 +35,14 @@ public class StatelessLoginFilter extends
 	public Authentication attemptAuthentication(HttpServletRequest request,
 			HttpServletResponse response) throws AuthenticationException,
 			IOException, ServletException {
-		final User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
-		final UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
-				user.getUsername(), user.getPassword());
-		return getAuthenticationManager().authenticate(loginToken);
+		try {
+			final User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
+			final UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
+					user.getUsername(), user.getPassword());
+			return getAuthenticationManager().authenticate(loginToken);
+		} catch (Exception e) {
+			throw new BadCredentialsException("client error!");
+		}
 	}
 	
 	@Override

@@ -16,7 +16,7 @@
 		<intercept-url pattern="/rest/login" requires-channel="https" method="POST" access="permitAll()" />
 		<intercept-url pattern="/rest/**" requires-channel="https" access="isAuthenticated()" />
 		<http-basic entry-point-ref="restServicesEntryPoint" />
-		<custom-filter ref="statelessLoginFilter" before="FIRST" />
+		<custom-filter ref="customFilters" position="FORM_LOGIN_FILTER" />
 	</http>
 	<!-- Entry point for REST service. -->
 	<beans:bean id="restServicesEntryPoint" class="com.pkstudio.hive.exceptions.rest.RestAuthenticationEntryPoint" />
@@ -28,6 +28,15 @@
 		<beans:constructor-arg index="3" ref="userDetailsService"/>
 		<beans:property name="authenticationManager" ref="authenticationManager"/>
 	</beans:bean>
+	<beans:bean id="customFilters" class="org.springframework.web.filter.CompositeFilter">
+    <beans:property name="filters">
+        <beans:list>
+            <beans:ref bean="statelessLoginFilter"/>
+            <beans:ref bean="statelessAuthenticationFilter"/>
+        </beans:list>
+    </beans:property>
+	</beans:bean>
+	
 	
 	<!-- Security configuration for other resources. Use login form. -->
 	<http use-expressions="true" create-session="stateless">
@@ -39,7 +48,7 @@
 		<authentication-provider>
 	    	<jdbc-user-service id="userService" data-source-ref="dataSource"
 				users-by-username-query="select username, password, account_enabled from users where username=?"
-				authorities-by-username-query="select username, 'ROLE_USER' from users where username=?" />
+				authorities-by-username-query="select username, 'ROLE_PLAYER' from users where username=?" />
 	  	</authentication-provider>
 	</authentication-manager>
 	
