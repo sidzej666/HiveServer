@@ -21,9 +21,11 @@
 	<!-- Entry point for REST service. -->
 	<beans:bean id="restServicesEntryPoint" class="com.pkstudio.hive.exceptions.rest.RestAuthenticationEntryPoint" />
 	<!-- Getting access token filter -->
-	<beans:bean id="statelessLoginFilter" class="com.pkstudio.hive.security.StatelessLoginFilter" >
+	<beans:bean id="statelessLoginFilter" class="com.pkstudio.hive.security.StatelessLoginFilter">
 		<beans:constructor-arg index="0" value="/rest/login"/>
 		<beans:constructor-arg index="1" ref="tokenAuthenticationService"/>
+		<beans:constructor-arg index="2" ref="authenticationManager"/>
+		<beans:constructor-arg index="3" ref="userDetailsService"/>
 		<beans:property name="authenticationManager" ref="authenticationManager"/>
 	</beans:bean>
 	
@@ -36,8 +38,8 @@
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider>
 	    	<jdbc-user-service id="userService" data-source-ref="dataSource"
-				users-by-username-query="select name, password_hash, 'true' from players where name=?"
-				authorities-by-username-query="select name, 'ROLE_PLAYER' from players where name=?" />
+				users-by-username-query="select username, password, account_enabled from users where username=?"
+				authorities-by-username-query="select username, 'ROLE_USER' from users where username=?" />
 	  	</authentication-provider>
 	</authentication-manager>
 	

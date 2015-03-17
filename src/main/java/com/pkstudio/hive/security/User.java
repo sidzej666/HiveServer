@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -51,15 +52,19 @@ public class User extends GenericId implements UserDetails {
 	private long expires;
 
 	@NotNull
+	@Column(name = "account_expired")
 	private boolean accountExpired;
 
 	@NotNull
+	@Column(name = "account_locked")
 	private boolean accountLocked;
 
 	@NotNull
+	@Column(name = "credentials_expired")
 	private boolean credentialsExpired;
 
 	@NotNull
+	@Column(name = "account_enabled")
 	private boolean accountEnabled;
 
 	@Transient
@@ -159,7 +164,7 @@ public class User extends GenericId implements UserDetails {
 	@Override
 	@JsonIgnore
 	public boolean isEnabled() {
-		return !accountEnabled;
+		return accountEnabled;
 	}
 
 	public long getExpires() {

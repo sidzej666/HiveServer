@@ -17,7 +17,7 @@ CREATE TABLE user_authorities (
 	PRIMARY KEY(id),
 	UNIQUE KEY(user_id, authority),
 	FOREIGN KEY (user_id) REFERENCES users(id)
-)	
+);
 
 CREATE TABLE games (
 	id INT NOT NULL AUTO_INCREMENT,

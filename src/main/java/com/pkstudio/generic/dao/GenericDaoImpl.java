@@ -54,4 +54,8 @@ public class GenericDaoImpl<T> implements GenericDao<T> {
 		List<T> result = currentSession.createCriteria(typeParameterClass.getCanonicalName()).list();
 		return result;
 	}
+	
+	protected SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
 }
