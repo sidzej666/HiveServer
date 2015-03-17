@@ -22,8 +22,6 @@
 		<property name="password" value="${jdbc.password}" />
 	</bean>
 
-	<context:property-placeholder location="/WEB-INF/jdbc.properties" />
-
 	<jdbc:initialize-database data-source="dataSource" enabled="true" ignore-failures="ALL">
 		<jdbc:script location="classpath:db/db-schema.sql" />
 		<jdbc:script location="classpath:db/db-data.sql" />

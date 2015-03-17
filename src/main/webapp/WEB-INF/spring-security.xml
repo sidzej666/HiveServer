@@ -13,11 +13,19 @@
 	-->
 	<http pattern="/rest/**" authentication-manager-ref="authenticationManager"
 		create-session="stateless" use-expressions="true" >
+		<intercept-url pattern="/rest/login" requires-channel="https" method="POST" access="permitAll()" />
 		<intercept-url pattern="/rest/**" requires-channel="https" access="isAuthenticated()" />
 		<http-basic entry-point-ref="restServicesEntryPoint" />
+		<custom-filter ref="statelessLoginFilter" before="FIRST" />
 	</http>
 	<!-- Entry point for REST service. -->
 	<beans:bean id="restServicesEntryPoint" class="com.pkstudio.hive.exceptions.rest.RestAuthenticationEntryPoint" />
+	<!-- Getting access token filter -->
+	<beans:bean id="statelessLoginFilter" class="com.pkstudio.hive.security.StatelessLoginFilter" >
+		<beans:constructor-arg index="0" value="/rest/login"/>
+		<beans:constructor-arg index="1" ref="tokenAuthenticationService"/>
+		<beans:property name="authenticationManager" ref="authenticationManager"/>
+	</beans:bean>
 	
 	<!-- Security configuration for other resources. Use login form. -->
 	<http use-expressions="true" create-session="stateless">
