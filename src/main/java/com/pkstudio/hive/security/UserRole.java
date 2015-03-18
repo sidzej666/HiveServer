@@ -12,7 +12,7 @@ public enum UserRole {
 
 	public static UserRole valueOf(final UserAuthority authority) {
 		switch (authority.getAuthority()) {
-		case "ROLE_USER":
+		case "ROLE_PLAYER":
 			return USER;
 		case "ROLE_ADMIN":
 			return ADMIN;

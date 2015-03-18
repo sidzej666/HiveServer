@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.pkstudio.generic.dao.GenericId;
-import com.pkstudio.hive.players.Player;
+import com.pkstudio.hive.security.User;
 
 @Entity
 @Table(name = "games")
@@ -15,11 +15,11 @@ public class Game extends GenericId {
 		
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "player_one_id")
-	private Player playerOne;
+	private User playerOne;
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "player_two_id")
-	private Player playerTwo;
+	private User playerTwo;
 	
 	@Column(name = "name", unique = false, nullable = true)
 	private String name;
@@ -27,16 +27,16 @@ public class Game extends GenericId {
 	@Column(name = "password", nullable = true)
 	private String password;
 	
-	public Player getPlayerOne() {
+	public User getPlayerOne() {
 		return playerOne;
 	}
-	public void setPlayerOne(Player playerOne) {
+	public void setPlayerOne(User playerOne) {
 		this.playerOne = playerOne;
 	}
-	public Player getPlayerTwo() {
+	public User getPlayerTwo() {
 		return playerTwo;
 	}
-	public void setPlayerTwo(Player playerTwo) {
+	public void setPlayerTwo(User playerTwo) {
 		this.playerTwo = playerTwo;
 	}
 	public String getName() {

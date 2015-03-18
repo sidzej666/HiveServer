@@ -2,6 +2,7 @@ package com.pkstudio.hive.players;
 
 import com.pkstudio.hive.exceptions.EmailIsNullException;
 import com.pkstudio.hive.exceptions.PlayerNameIsNullException;
+import com.pkstudio.hive.security.User;
 
 public class PlayerDto {
 	private String name;
@@ -12,10 +13,10 @@ public class PlayerDto {
 		
 	}
 	
-	public PlayerDto(Player player) {
-		this.name = player.getName();
-		this.id = player.getId();
-		this.setEmail(player.getEmail());
+	public PlayerDto(User user) {
+		this.name = user.getUsername();
+		this.id = user.getId();
+		this.setEmail(user.getEmail());
 	}
 	
 	public void validate() {

@@ -26,6 +26,6 @@ CREATE TABLE games (
 	name VARCHAR(50) NOT NULL,
 	password VARCHAR(20) NULL,
 	PRIMARY KEY(id),
-	CONSTRAINT FOREIGN KEY(player_one_id) REFERENCES players(id),
-	CONSTRAINT FOREIGN KEY(player_two_id) REFERENCES players(id)
+	CONSTRAINT FOREIGN KEY(player_one_id) REFERENCES users(id),
+	CONSTRAINT FOREIGN KEY(player_two_id) REFERENCES users(id)
 );

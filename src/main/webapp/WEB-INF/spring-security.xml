@@ -26,6 +26,7 @@
 		<beans:constructor-arg index="1" ref="tokenAuthenticationService"/>
 		<beans:constructor-arg index="2" ref="authenticationManager"/>
 		<beans:constructor-arg index="3" ref="userDetailsService"/>
+		<beans:constructor-arg index="4" ref="defaultRestErrorResolver"/>
 		<beans:property name="authenticationManager" ref="authenticationManager"/>
 	</beans:bean>
 	<beans:bean id="customFilters" class="org.springframework.web.filter.CompositeFilter">
@@ -48,7 +49,7 @@
 		<authentication-provider>
 	    	<jdbc-user-service id="userService" data-source-ref="dataSource"
 				users-by-username-query="select username, password, account_enabled from users where username=?"
-				authorities-by-username-query="select username, 'ROLE_PLAYER' from users where username=?" />
+				authorities-by-username-query="select username, authority from users u left join user_authorities a on u.id = a.user_id where username=?" />
 	  	</authentication-provider>
 	</authentication-manager>
 	

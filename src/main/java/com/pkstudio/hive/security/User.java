@@ -1,6 +1,5 @@
 package com.pkstudio.hive.security;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -10,24 +9,22 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pkstudio.generic.dao.GenericId;
 import com.sun.istack.internal.NotNull;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = { "username" }))
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User extends GenericId implements UserDetails {
 
 	public User() {
@@ -44,6 +41,9 @@ public class User extends GenericId implements UserDetails {
 
 	@NotNull
 	private String username;
+	
+	@NotNull
+	private String email;
 
 	@NotNull
 	private String password;
@@ -178,5 +178,13 @@ public class User extends GenericId implements UserDetails {
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + ": " + getUsername();
+	}
+
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

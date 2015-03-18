@@ -14,20 +14,26 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pkstudio.hive.exceptions.rest.DefaultRestErrorResolver;
+import com.pkstudio.hive.exceptions.rest.RestError;
 
 public class StatelessLoginFilter extends
 		AbstractAuthenticationProcessingFilter {
 	
 	private TokenAuthenticationService tokenAuthenticationService;
 	private UserDetailsService userDetailsService;
+	private DefaultRestErrorResolver defaultRestErrorResolver;
 	
 	protected StatelessLoginFilter(String defaultFilterProcessesUrl, TokenAuthenticationService tokenAuthenticationService,
-			AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
+			AuthenticationManager authenticationManager, UserDetailsService userDetailsService,
+			DefaultRestErrorResolver defaultRestErrorResolver) {
 		super(defaultFilterProcessesUrl);
 		this.tokenAuthenticationService = tokenAuthenticationService;
 		this.userDetailsService = userDetailsService;
+		this.defaultRestErrorResolver = defaultRestErrorResolver;
 		setAuthenticationManager(authenticationManager);
 	}
 
@@ -41,7 +47,11 @@ public class StatelessLoginFilter extends
 					user.getUsername(), user.getPassword());
 			return getAuthenticationManager().authenticate(loginToken);
 		} catch (Exception e) {
-			throw new BadCredentialsException("client error!");
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			RestError restError = defaultRestErrorResolver.resolveError(new ServletWebRequest(request), 
+					null, new BadCredentialsException("Bad credentials"));
+			response.getWriter().write(restError.toJsonString());
+			return null;
 		}
 	}
 	

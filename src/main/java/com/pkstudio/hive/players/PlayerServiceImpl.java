@@ -21,7 +21,7 @@ public class PlayerServiceImpl implements PlayerService {
 		playerDto.validate();
 		Player player = new Player(playerDto);
 		playerDao.save(player);
-		return new PlayerDto(player);
+		return new PlayerDto();
 	}
 
 }
