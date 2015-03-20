@@ -14,12 +14,15 @@
 	<http pattern="/rest/**" authentication-manager-ref="authenticationManager"
 		create-session="stateless" use-expressions="true" >
 		<intercept-url pattern="/rest/login" requires-channel="https" method="POST" access="permitAll()" />
-		<intercept-url pattern="/rest/**" requires-channel="https" access="isAuthenticated()" />
+		<intercept-url pattern="/rest/**" requires-channel="https" method="GET" access="isAuthenticated()" />
+		<intercept-url pattern="/rest/**" requires-channel="https" method="POST" access="isAuthenticated()" />
+		<intercept-url pattern="/rest/**" requires-channel="https" method="PUT" access="isAuthenticated()" />
+		<intercept-url pattern="/rest/**" requires-channel="https" method="DELETE" access="isAuthenticated()" />
 		<http-basic entry-point-ref="restServicesEntryPoint" />
 		<custom-filter ref="customFilters" position="FORM_LOGIN_FILTER" />
 	</http>
 	<!-- Entry point for REST service. -->
-	<beans:bean id="restServicesEntryPoint" class="com.pkstudio.hive.exceptions.rest.RestAuthenticationEntryPoint" />
+	<beans:bean id="restServicesEntryPoint" class="com.pkstudio.hive.security.RestAuthenticationEntryPoint" />
 	<!-- Getting access token filter -->
 	<beans:bean id="statelessLoginFilter" class="com.pkstudio.hive.security.StatelessLoginFilter">
 		<beans:constructor-arg index="0" value="/rest/login"/>
@@ -32,6 +35,7 @@
 	<beans:bean id="customFilters" class="org.springframework.web.filter.CompositeFilter">
     <beans:property name="filters">
         <beans:list>
+        	<beans:ref bean="statelessCSRFFilter"/>
             <beans:ref bean="statelessLoginFilter"/>
             <beans:ref bean="statelessAuthenticationFilter"/>
         </beans:list>

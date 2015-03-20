@@ -1,3 +1,7 @@
+DROP TABLE games;
+DROP TABLE user_authorities;
+DROP TABLE users;
+
 CREATE TABLE users (
 	id INT NOT NULL AUTO_INCREMENT,
 	username VARCHAR(30) NOT NULL UNIQUE,

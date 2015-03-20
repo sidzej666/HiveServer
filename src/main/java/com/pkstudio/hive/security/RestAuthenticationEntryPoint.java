@@ -1,4 +1,4 @@
-package com.pkstudio.hive.exceptions.rest;
+package com.pkstudio.hive.security;
 
 import java.io.IOException;
 
@@ -11,6 +11,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.web.context.request.ServletWebRequest;
 
+import com.pkstudio.hive.exceptions.rest.DefaultRestErrorResolver;
+import com.pkstudio.hive.exceptions.rest.RestError;
+
 public final class RestAuthenticationEntryPoint implements
 		AuthenticationEntryPoint {
 	@Inject
@@ -21,6 +24,7 @@ public final class RestAuthenticationEntryPoint implements
 			HttpServletResponse response, AuthenticationException authException)
 			throws IOException {
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		response.setContentType("application/json");
 		RestError restError = defaultRestErrorResolver.resolveError(new ServletWebRequest(request), 
 				null, new BadCredentialsException("Bad credentials"));
 		response.getWriter().write(restError.toJsonString());
