@@ -12,4 +12,6 @@ http://blog.jdriven.com/2014/10/stateless-spring-security-part-1-stateless-csrf-
 http://www.webdeveasy.com/interceptors-in-angularjs-and-useful-examples/
 http://blog.jdriven.com/2014/10/stateless-spring-security-part-2-stateless-authentication/
 http://thejackalofjavascript.com/architecting-a-restful-node-js-app/
+http://angular-tips.com/blog/2014/05/json-web-tokens-introduction/
+http://angular-tips.com/blog/2014/05/json-web-tokens-examples/
 http://getbootstrap.com/components/

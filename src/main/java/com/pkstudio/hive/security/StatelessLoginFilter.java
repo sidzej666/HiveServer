@@ -4,9 +4,11 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +44,9 @@ public class StatelessLoginFilter extends
 			HttpServletResponse response) throws AuthenticationException,
 			IOException, ServletException {
 		try {
+			if (HttpMethod.OPTIONS.toString().equalsIgnoreCase(request.getMethod())) {
+				return null;
+			}
 			final User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
 			final UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
 					user.getUsername(), user.getPassword());
