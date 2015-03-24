@@ -6,15 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.pkstudio.hive.players.PlayerDto;
 
 @JsonInclude(value = ALWAYS)
 public class GameDto {
 	private Integer id;
 	private String name;
 	private boolean isPrivate;
-	private PlayerDto playerOne;
-	private PlayerDto playerTwo;
+	//private UserDto playerOne;
+	//private UserDto playerTwo;
 	
 	public GameDto() {
 		
@@ -24,10 +23,10 @@ public class GameDto {
 		this.setId(game.getId());
 		this.name = game.getName();
 		this.isPrivate = game.getPassword() == null ? false : true;
-		this.setPlayerOne(new PlayerDto(game.getPlayerOne()));
-		if (game.getPlayerTwo() != null) {
-			this.setPlayerTwo(new PlayerDto(game.getPlayerTwo()));
-		}
+		//this.setPlayerOne(new PlayerDto(game.getPlayerOne()));
+		//if (game.getPlayerTwo() != null) {
+		//	this.setPlayerTwo(new PlayerDto(game.getPlayerTwo()));
+		//}
 	}
 	
 	public static List<GameDto> fromGamesList(List<Game> games) {
@@ -55,21 +54,5 @@ public class GameDto {
 	}
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public PlayerDto getPlayerOne() {
-		return playerOne;
-	}
-
-	public void setPlayerOne(PlayerDto playerOne) {
-		this.playerOne = playerOne;
-	}
-
-	public PlayerDto getPlayerTwo() {
-		return playerTwo;
-	}
-
-	public void setPlayerTwo(PlayerDto playerTwo) {
-		this.playerTwo = playerTwo;
 	}
 }

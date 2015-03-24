@@ -6,6 +6,9 @@ import org.springframework.security.authentication.AccountStatusUserDetailsCheck
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import com.pkstudio.hive.users.User;
+import com.pkstudio.hive.users.UsersDao;
+
 @Component
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 	

@@ -13,6 +13,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pkstudio.hive.users.User;
 
 public final class TokenHandler {
 

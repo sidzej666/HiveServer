@@ -21,6 +21,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pkstudio.hive.exceptions.rest.DefaultRestErrorResolver;
 import com.pkstudio.hive.exceptions.rest.RestError;
+import com.pkstudio.hive.users.User;
 
 public class StatelessLoginFilter extends
 		AbstractAuthenticationProcessingFilter {

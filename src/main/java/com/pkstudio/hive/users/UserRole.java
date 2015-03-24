@@ -1,4 +1,5 @@
-package com.pkstudio.hive.security;
+package com.pkstudio.hive.users;
+
 
 public enum UserRole {
 	USER, ADMIN;

@@ -5,6 +5,8 @@ import java.util.Collection;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
+import com.pkstudio.hive.users.User;
+
 public class UserAuthentication implements Authentication {
 
 	private final User user;

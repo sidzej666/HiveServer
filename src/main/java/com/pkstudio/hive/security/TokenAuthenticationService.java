@@ -10,6 +10,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import com.pkstudio.hive.users.User;
+import com.pkstudio.hive.users.UsersDao;
+
 @Component
 public class TokenAuthenticationService {
 	private static final String AUTH_HEADER_NAME = "X-AUTH-TOKEN";

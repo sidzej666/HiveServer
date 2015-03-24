@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.pkstudio.generic.dao.GenericId;
-import com.pkstudio.hive.security.User;
+import com.pkstudio.hive.users.User;
 
 @Entity
 @Table(name = "games")

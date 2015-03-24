@@ -1,4 +1,4 @@
-package com.pkstudio.hive.security;
+package com.pkstudio.hive.users;
 
 import com.pkstudio.generic.dao.GenericDao;
 
