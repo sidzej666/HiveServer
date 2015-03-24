@@ -32,7 +32,7 @@
 	
 	<filter>
 		<filter-name>cors</filter-name>
-		<filter-class>com.pkstudio.hive.exceptions.rest.CorsFilter</filter-class>
+		<filter-class>com.pkstudio.hive.security.CorsFilter</filter-class>
 	</filter>
 
 	<filter-mapping>

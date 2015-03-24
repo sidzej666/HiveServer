@@ -35,7 +35,9 @@
 	<beans:bean id="customFilters" class="org.springframework.web.filter.CompositeFilter">
     <beans:property name="filters">
         <beans:list>
+        	<!-- 
         	<beans:ref bean="statelessCSRFFilter"/>
+        	 -->
             <beans:ref bean="statelessLoginFilter"/>
             <beans:ref bean="statelessAuthenticationFilter"/>
         </beans:list>
