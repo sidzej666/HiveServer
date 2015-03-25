@@ -18,8 +18,8 @@ import com.pkstudio.hive.users.User;
 public final class TokenHandler {
 
 	private static final String HMAC_ALGO = "HmacSHA256";
-	private static final String SEPARATOR = ".";
-	private static final String SEPARATOR_SPLITTER = "\\.";
+	public static final String SEPARATOR = ".";
+	public static final String SEPARATOR_SPLITTER = "\\.";
 
 	private final Mac hmac;
 
@@ -63,7 +63,7 @@ public final class TokenHandler {
 		return sb.toString();
 	}
 
-	private User fromJSON(final byte[] userBytes) {
+	public User fromJSON(final byte[] userBytes) {
 		try {
 			return new ObjectMapper().readValue(new ByteArrayInputStream(userBytes), User.class);
 		} catch (IOException e) {
@@ -83,7 +83,7 @@ public final class TokenHandler {
 		return DatatypeConverter.printBase64Binary(content);
 	}
 
-	private byte[] fromBase64(String content) {
+	public byte[] fromBase64(String content) {
 		return DatatypeConverter.parseBase64Binary(content);
 	}
 
