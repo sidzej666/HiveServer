@@ -1,6 +1,5 @@
 package com.pkstudio.hive.users;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
