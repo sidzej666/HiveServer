@@ -16,3 +16,4 @@ http://angular-tips.com/blog/2014/05/json-web-tokens-introduction/
 http://angular-tips.com/blog/2014/05/json-web-tokens-examples/
 http://getbootstrap.com/components/
 http://xebee.xebia.in/index.php/2014/08/02/angularjs-role-based-access-on-gui/
+http://stackoverflow.com/questions/23737327/angularjs-ng-show-hide-sign-in-option-after-successful-login
