@@ -36,11 +36,46 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User createUser(User user) {		
-		if (isEmpty(user.getUsername())) {
-			throw new UsernameRequiredException();
+	public User createUser(User user) {
+		
+		validateAndTrimUsername(user);
+		validatePassword(user);
+		validateAndTrimEmail(user);
+		
+		checkUsernameAvailability(user);
+		setNewUserDefaultValues(user);
+		
+		usersDao.save(user);
+		
+		return usersDao.getById(user.getId());
+	}
+
+	private void setNewUserDefaultValues(User user) {
+		user.setEnabled(true);
+		Set<UserRole> roles = new HashSet<UserRole>();
+		roles.add(UserRole.USER);
+		user.setRoles(roles);
+	}
+
+	private void checkUsernameAvailability(User user) {
+		if (usersDao.findByUsername(user.getUsername()) != null) {
+			throw new UsernameTakenException();
+		}
+	}
+
+	private void validateAndTrimEmail(User user) {
+		if (isEmpty(user.getEmail())) {
+			throw new EmailRequiredException();
 		}
 		
+		user.setEmail(user.getEmail().trim());
+		
+		if (!emailValidator.isValid(user.getEmail())) {
+			throw new InvalidEmailException(user.getEmail());
+		}
+	}
+
+	private void validatePassword(User user) {
 		if (isEmpty(user.getPassword())) {
 			throw new PasswordRequiredException();
 		}
@@ -48,29 +83,12 @@ public class UserServiceImpl implements UserService {
 		if (user.getPassword().length() < 5) {
 			throw new PasswordToShortException();
 		}
-		
-		if (isEmpty(user.getEmail())) {
-			throw new EmailRequiredException();
-		}
-		
-		user.setUsername(user.getUsername().trim());
-		user.setEmail(user.getEmail().trim());
-		
-		if (!emailValidator.isValid(user.getEmail())) {
-			throw new InvalidEmailException(user.getEmail());
-		}
-		
-		if (usersDao.findByUsername(user.getUsername()) != null) {
-			throw new UsernameTakenException();
-		}
+	}
 
-		user.setEnabled(true);
-		Set<UserRole> roles = new HashSet<UserRole>();
-		roles.add(UserRole.USER);
-		user.setRoles(roles);
-		
-		usersDao.save(user);
-		
-		return usersDao.getById(user.getId());
+	private void validateAndTrimUsername(User user) {
+		if (isEmpty(user.getUsername())) {
+			throw new UsernameRequiredException();
+		}
+		user.setUsername(user.getUsername());
 	}
 }
