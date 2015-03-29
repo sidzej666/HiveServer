@@ -14,6 +14,7 @@
 	<http pattern="/rest/**" authentication-manager-ref="authenticationManager"
 		create-session="stateless" use-expressions="true" >
 		<intercept-url pattern="/rest/login" requires-channel="https" method="POST" access="permitAll()" />
+		<intercept-url pattern="/rest/users" requires-channel="https" method="POST" access="permitAll()" />
 		<intercept-url pattern="/rest/**" requires-channel="https" method="GET" access="isAuthenticated()" />
 		<intercept-url pattern="/rest/**" requires-channel="https" method="POST" access="isAuthenticated()" />
 		<intercept-url pattern="/rest/**" requires-channel="https" method="PUT" access="isAuthenticated()" />

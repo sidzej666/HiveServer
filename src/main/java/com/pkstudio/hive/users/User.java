@@ -166,6 +166,10 @@ public class User extends GenericId implements UserDetails {
 	public boolean isEnabled() {
 		return accountEnabled;
 	}
+	
+	public void setEnabled(boolean enabled) {
+		this.accountEnabled = enabled;
+	}
 
 	public long getExpires() {
 		return expires;

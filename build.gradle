@@ -38,11 +38,15 @@ dependencies {
 	compile 'jstl:jstl:1.2'
 	compile 'com.fasterxml.jackson.core:jackson-databind:2.5.0'
 	compile 'javax.inject:javax.inject:1'
+	compile 'commons-validator:commons-validator:1.4.1'
+	
 	//include in compile only, exclude in the war
 	providedCompile 'javax.servlet:servlet-api:2.5'
 	testCompile 'junit:junit:4.11'
 	testCompile 'org.jbehave:jbehave-core:3.9.5'
 	testCompile 'org.jbehave:jbehave-spring:3.9.5'
+	testCompile 'org.mockito:mockito-all:1.10.19'
+	testCompile 'org.assertj:assertj-core:2.0.0'
 	compile 'com.google.code.gson:gson:1.7.1'
 }
 
