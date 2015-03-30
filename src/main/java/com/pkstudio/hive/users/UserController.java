@@ -2,12 +2,14 @@ package com.pkstudio.hive.users;
 
 import static com.pkstudio.hive.security.TokenAuthenticationService.AUTH_HEADER_NAME;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import javax.inject.Inject;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pkstudio.hive.security.TokenAuthenticationService;
@@ -35,5 +37,10 @@ public class UserController {
 		User userFromToken = tokenAuthenticationService.getUserFromToken(authToken);
 		User user = userService.getById(userFromToken.getId());
 		return user;
+	}
+	
+	@RequestMapping(method = POST)
+	public User createUser() {
+		return null;
 	}
 }
