@@ -8,20 +8,17 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pkstudio.hive.security.TokenAuthenticationService;
+import com.pkstudio.hive.security.UserAuthentication;
 
 @RestController
 @RequestMapping(value = "/rest/users")
@@ -53,6 +50,7 @@ public class UserController {
 	public User createUser(HttpServletResponse response, @RequestBody User user) {
 		User createdUser = userService.createUser(user);
 		response.addHeader(HttpHeaders.LOCATION, linkTo(UserController.class).slash(createdUser.getId()).toUriComponentsBuilder().scheme("https").build().toString());
+		tokenAuthenticationService.addAuthentication(response, new UserAuthentication(createdUser));
 		return createdUser;
 	}
 }
