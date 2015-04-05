@@ -10,6 +10,7 @@ import org.mockito.Mock;
 
 import com.pkstudio.commons.TestBase;
 import com.pkstudio.hive.exceptions.EmailRequiredException;
+import com.pkstudio.hive.exceptions.EmailTakenException;
 import com.pkstudio.hive.exceptions.InvalidEmailException;
 import com.pkstudio.hive.exceptions.PasswordRequiredException;
 import com.pkstudio.hive.exceptions.PasswordToShortException;
@@ -23,7 +24,10 @@ public class UserServiceTest extends TestBase {
 	private final String NEW_USER_PASSWORD = "password";
 	private final String TO_SHORT_PASSWORD = "pass";
 	private final String NEW_USER_EMAIL = "email@email.com";
+	private final String EXISTING_EMAIL = "existing@email.com";
 	private final String INVALID_EMAIL = "invalid_email";
+	private final int EXISTING_USER_ID = 1;
+	private final int NONEXISTENT_USER_ID = 0;
 	
 	@Mock
 	private UsersDao usersDao;
@@ -32,7 +36,7 @@ public class UserServiceTest extends TestBase {
 	private UserServiceImpl userService;
 	
 	@Test(expected = UsernameRequiredException.class)
-	public void createUserShouldThrowUsernameRequiredExceptionWhenNoUsernameIsNull() {
+	public void createUser_ShouldThrowUsernameRequiredExceptionWhenUsernameIsNull() {
 		User user = new User();
 		user.setUsername(null);
 		
@@ -40,7 +44,7 @@ public class UserServiceTest extends TestBase {
 	}
 	
 	@Test(expected = UsernameRequiredException.class)
-	public void createUserShouldThrowUsernameRequiredExceptionWhenNoUsernameIsEmpty() {
+	public void createUser_ShouldThrowUsernameRequiredExceptionWhenUsernameIsEmpty() {
 		User user = new User();
 		user.setUsername("");
 		
@@ -48,18 +52,23 @@ public class UserServiceTest extends TestBase {
 	}
 	
 	@Test(expected = UsernameTakenException.class)
-	public void createUserShouldThrowUsernameTakenExceptionWhenUsernameAlreadyTaken() {
+	public void createUser_ShouldThrowUsernameTakenExceptionWhenUsernameAlreadyTaken() {
 		User user = new User();
 		user.setUsername(EXISTING_USERNAME);
 		user.setPassword(NEW_USER_PASSWORD);
 		user.setEmail(NEW_USER_EMAIL);
 		when(usersDao.findByUsername(EXISTING_USERNAME)).thenReturn(user);
 		
-		userService.createUser(user);
+		try {
+			userService.createUser(user);
+		} catch (UsernameTakenException e) {
+			assertThat(e.getMessage().contains(EXISTING_USERNAME));
+			throw e;
+		}
 	}
 	
 	@Test(expected = PasswordRequiredException.class)
-	public void createUserShouldThrowPasswordRequiredExceptionWhenPasswordIsNull() {
+	public void createUser_ShouldThrowPasswordRequiredExceptionWhenPasswordIsNull() {
 		User user = new User();
 		user.setUsername(NEW_USERNAME);
 		user.setPassword(null);
@@ -68,7 +77,7 @@ public class UserServiceTest extends TestBase {
 	}
 	
 	@Test(expected = PasswordRequiredException.class)
-	public void createUserShouldThrowPasswordRequiredExceptionWhenPasswordIsEmpty() {
+	public void createUser_ShouldThrowPasswordRequiredExceptionWhenPasswordIsEmpty() {
 		User user = new User();
 		user.setUsername(NEW_USERNAME);
 		user.setPassword("");
@@ -77,7 +86,7 @@ public class UserServiceTest extends TestBase {
 	}
 	
 	@Test(expected = PasswordToShortException.class)
-	public void createUserShouldThrowPasswordToShortExceptionWhenPasswordIsToShort() {
+	public void createUser_ShouldThrowPasswordToShortExceptionWhenPasswordIsToShort() {
 		User user = new User();
 		user.setUsername(NEW_USERNAME);
 		user.setPassword(TO_SHORT_PASSWORD);
@@ -86,7 +95,7 @@ public class UserServiceTest extends TestBase {
 	}
 	
 	@Test(expected = EmailRequiredException.class)
-	public void createUserShouldThrowEmailRequiredExceptionWhenEmailIsNull() {
+	public void createUser_ShouldThrowEmailRequiredExceptionWhenEmailIsNull() {
 		User user = new User();
 		user.setUsername(NEW_USERNAME);
 		user.setPassword(NEW_USER_PASSWORD);
@@ -96,7 +105,7 @@ public class UserServiceTest extends TestBase {
 	}
 	
 	@Test(expected = EmailRequiredException.class)
-	public void createUserShouldThrowEmailRequiredExceptionWhenEmailIsEmpty() {
+	public void createUser_ShouldThrowEmailRequiredExceptionWhenEmailIsEmpty() {
 		User user = new User();
 		user.setUsername(NEW_USERNAME);
 		user.setPassword(NEW_USER_PASSWORD);
@@ -106,7 +115,7 @@ public class UserServiceTest extends TestBase {
 	}
 	
 	@Test(expected = InvalidEmailException.class)
-	public void createUserShouldThrowInvalidEmailExceptionWhenEmailIsInvalid() {
+	public void createUser_ShouldThrowInvalidEmailExceptionWhenEmailIsInvalid() {
 		User user = new User();
 		user.setUsername(NEW_USERNAME);
 		user.setPassword(NEW_USER_PASSWORD);
@@ -121,7 +130,7 @@ public class UserServiceTest extends TestBase {
 	}
 	
 	@Test
-	public void createUserShouldCreateUserAndSetDefaultParameters() {
+	public void createUser_ShouldCreateUserAndSetDefaultParameters() {
 		User user = new User();
 		user.setId(1);
 		user.setUsername(NEW_USERNAME);
@@ -145,7 +154,7 @@ public class UserServiceTest extends TestBase {
 	}
 	
 	@Test
-	public void createUserShouldTrimEmailAddress() {
+	public void createUser_ShouldTrimEmailAddress() {
 		User user = new User();
 		user.setId(1);
 		user.setUsername(NEW_USERNAME);
@@ -158,15 +167,46 @@ public class UserServiceTest extends TestBase {
 	}
 	
 	@Test
-	public void createUserShouldTrimUsername() {
+	public void createUser_ShouldTrimUsername() {
 		User user = new User();
 		user.setId(1);
-		user.setUsername(NEW_USERNAME);
-		user.setPassword(" " + NEW_USER_PASSWORD + " ");
+		user.setUsername(" " + NEW_USERNAME + " ");
+		user.setPassword(NEW_USER_PASSWORD);
 		user.setEmail(NEW_USER_EMAIL);
 		
 		userService.createUser(user);
 		
 		assertThat(user.getUsername()).isEqualTo(NEW_USERNAME);
+	}
+	
+	@Test(expected = EmailTakenException.class)
+	public void createUser_shouldThrowWhenEmailAlreadyTaken() {
+		User user = new User();
+		user.setUsername(NEW_USERNAME);
+		user.setEmail(EXISTING_EMAIL);
+		user.setPassword(NEW_USER_PASSWORD);
+		when(usersDao.findByEmail(EXISTING_EMAIL)).thenReturn(user);		
+		
+		try {
+			userService.createUser(user);
+		} catch (EmailTakenException e) {
+			assertThat(e.getMessage().contains(EXISTING_EMAIL));
+			throw e;
+		}
+	}
+	
+	@Test
+	public void findById_shouldReturnExistingUser() {
+		User user = new User();
+		when(usersDao.getById(EXISTING_USER_ID)).thenReturn(user);
+		
+		assertThat(userService.getById(EXISTING_USER_ID)).isEqualTo(user);
+	}
+	
+	@Test
+	public void findById_shouldReturnNullForNonexistentUser() {
+		when(usersDao.getById(NONEXISTENT_USER_ID)).thenReturn(null);
+		
+		assertThat(userService.getById(NONEXISTENT_USER_ID)).isNull();
 	}
 }

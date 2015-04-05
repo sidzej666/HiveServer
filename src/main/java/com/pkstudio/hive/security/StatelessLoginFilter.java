@@ -54,7 +54,7 @@ public class StatelessLoginFilter extends
 			return getAuthenticationManager().authenticate(loginToken);
 		} catch (Exception e) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.setContentType("application/json");
+			response.setContentType("application/json;charset=UTF-8");
 			RestError restError = defaultRestErrorResolver.resolveError(new ServletWebRequest(request), 
 					null, new BadCredentialsException("Bad credentials"));
 			response.getWriter().write(restError.toJsonString());

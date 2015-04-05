@@ -23,4 +23,10 @@ public class UsersDaoImpl extends GenericDaoImpl<User> implements UsersDao {
 		return (User) currentSession.createCriteria(User.class).add(Restrictions.eq("username", username)).uniqueResult();
 	}
 
+	@Override
+	public User findByEmail(String email) {
+		Session currentSession = getSessionFactory().getCurrentSession();
+		return (User) currentSession.createCriteria(User.class).add(Restrictions.ilike("email", email)).uniqueResult();
+	}
+
 }

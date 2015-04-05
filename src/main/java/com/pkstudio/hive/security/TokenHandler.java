@@ -9,12 +9,17 @@ import java.util.Date;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.inject.Inject;
 import javax.xml.bind.DatatypeConverter;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pkstudio.hive.users.User;
 
+@Component
 public final class TokenHandler {
 
 	private static final String HMAC_ALGO = "HmacSHA256";
@@ -23,10 +28,11 @@ public final class TokenHandler {
 
 	private final Mac hmac;
 
-	public TokenHandler(byte[] secretKey) {
+	@Inject
+	public TokenHandler(@Value("${token.secret}") String secret) {
 		try {
 			hmac = Mac.getInstance(HMAC_ALGO);
-			hmac.init(new SecretKeySpec(secretKey, HMAC_ALGO));
+			hmac.init(new SecretKeySpec(DatatypeConverter.parseBase64Binary(secret), HMAC_ALGO));
 		} catch (NoSuchAlgorithmException | InvalidKeyException e) {
 			throw new IllegalStateException("failed to initialize HMAC: " + e.getMessage(), e);
 		}

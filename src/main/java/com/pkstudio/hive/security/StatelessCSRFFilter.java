@@ -55,7 +55,7 @@ public class StatelessCSRFFilter extends OncePerRequestFilter {
 
 			if (csrfTokenValue == null || !csrfTokenValue.equals(csrfCookieValue)) {
 				response.setStatus(SC_FORBIDDEN);
-				response.setContentType("application/json");
+				response.setContentType("application/json;charset=UTF-8");
 				RestError restError = defaultRestErrorResolver.resolveError(new ServletWebRequest(request), 
 						null, new AccessDeniedException("Missing or non-matching CSRF-token"));
 				response.getWriter().write(restError.toJsonString());

@@ -20,3 +20,7 @@ http://stackoverflow.com/questions/23737327/angularjs-ng-show-hide-sign-in-optio
 http://blog.brunoscopelliti.com/form-validation-the-angularjs-way/
 https://docs.angularjs.org/guide/forms
 http://www.petrikainulainen.net/programming/spring-framework/unit-testing-of-spring-mvc-controllers-normal-controllers/
+http://www.future-processing.pl/blog/exploring-spring-boot-and-spring-security-custom-token-based-authentication-of-rest-services-with-spring-security-and-pinch-of-spring-java-configuration-and-spring-integration-testing/
+http://blog.zenika.com/index.php?post/2013/01/15/REST-Web-Services-testing-with-Spring-MVC
+http://azagorneanu.blogspot.com/2013/06/hateoas-using-spring-framework.html
+http://www.mkyong.com/hibernate/cascade-jpa-hibernate-annotation-common-mistake/

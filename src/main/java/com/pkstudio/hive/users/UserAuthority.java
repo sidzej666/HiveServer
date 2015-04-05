@@ -1,9 +1,13 @@
 package com.pkstudio.hive.users;
 
+import java.io.Serializable;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -15,17 +19,15 @@ import com.sun.istack.internal.NotNull;
 
 @Entity
 @Table(name = "user_authorities")
-@IdClass(UserAuthority.class)
-public class UserAuthority extends GenericId implements GrantedAuthority {
+public class UserAuthority extends GenericId implements GrantedAuthority, Serializable {
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
 	@JsonIgnore
-	@Id
 	private User user;
 
 	@NotNull
-	@Id
 	private String authority;
 
 	public User getUser() {

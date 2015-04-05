@@ -12,6 +12,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;
 
 import com.pkstudio.hive.exceptions.EmailRequiredException;
+import com.pkstudio.hive.exceptions.EmailTakenException;
 import com.pkstudio.hive.exceptions.InvalidEmailException;
 import com.pkstudio.hive.exceptions.PasswordRequiredException;
 import com.pkstudio.hive.exceptions.PasswordToShortException;
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
 		validateAndTrimEmail(user);
 		
 		checkUsernameAvailability(user);
+		checkEmailAvailability(user);
 		setNewUserDefaultValues(user);
 		
 		usersDao.save(user);
@@ -50,16 +52,23 @@ public class UserServiceImpl implements UserService {
 		return usersDao.getById(user.getId());
 	}
 
+	private void checkEmailAvailability(User user) {
+		if (usersDao.findByEmail(user.getEmail()) != null) {
+			throw new EmailTakenException(user.getEmail());
+		}
+	}
+
 	private void setNewUserDefaultValues(User user) {
 		user.setEnabled(true);
-		Set<UserRole> roles = new HashSet<UserRole>();
-		roles.add(UserRole.USER);
-		user.setRoles(roles);
+		Set<UserAuthority> roles = new HashSet<UserAuthority>();
+		UserAuthority userRole = UserRole.USER.asAuthorityFor(user);
+		roles.add(userRole);
+		user.setAuthorities(roles);
 	}
 
 	private void checkUsernameAvailability(User user) {
 		if (usersDao.findByUsername(user.getUsername()) != null) {
-			throw new UsernameTakenException();
+			throw new UsernameTakenException(user.getUsername());
 		}
 	}
 
@@ -89,6 +98,6 @@ public class UserServiceImpl implements UserService {
 		if (isEmpty(user.getUsername())) {
 			throw new UsernameRequiredException();
 		}
-		user.setUsername(user.getUsername());
+		user.setUsername(user.getUsername().trim());
 	}
 }

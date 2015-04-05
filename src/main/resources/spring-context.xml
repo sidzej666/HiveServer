@@ -6,10 +6,10 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
-
-	<context:property-placeholder location="/WEB-INF/jdbc.properties, classpath:application.properties" />
 	
-	<import resource="mvc-dispatcher-servlet.xml"/>
-	<import resource="data-source.xml"/>
-	<import resource="spring-security.xml"/>
+	<context:property-placeholder location="classpath:**/jdbc.properties, classpath:**/application.properties" />
+	
+	<import resource="/mvc-dispatcher-servlet.xml"/>
+	<import resource="/data-source.xml"/>
+	<import resource="/spring-security.xml"/>
 </beans>

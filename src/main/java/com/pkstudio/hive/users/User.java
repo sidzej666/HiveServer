@@ -5,7 +5,6 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +13,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,6 +36,12 @@ public class User extends GenericId implements UserDetails {
 	}
 
 	public User(String username, Date expires) {
+		this.username = username;
+		this.expires = expires.getTime();
+	}
+	
+	public User(int id, String username, Date expires) {
+		this.setId(id);
 		this.username = username;
 		this.expires = expires.getTime();
 	}
@@ -70,7 +77,8 @@ public class User extends GenericId implements UserDetails {
 	@Transient
 	private String newPassword;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+	@Cascade(CascadeType.SAVE_UPDATE)
 	private Set<UserAuthority> authorities;
 
 	@Override
@@ -107,6 +115,10 @@ public class User extends GenericId implements UserDetails {
 	@JsonIgnore
 	public Set<UserAuthority> getAuthorities() {
 		return authorities;
+	}
+	
+	public void setAuthorities(Set<UserAuthority> authorities) {
+		this.authorities = authorities;
 	}
 
 	// Use Roles as external API
