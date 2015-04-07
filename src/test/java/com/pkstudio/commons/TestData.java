@@ -24,7 +24,7 @@ public class TestData {
 	public final static User TEST_USER_TWO = createTestUser(TEST_USER_TWO_USERNAME, TEST_USER_TWO_PASSWORD, TEST_USET_TWO_EMAIL);
 	public final static Game TEST_GAME_ONE = createTestGame(TEST_GAME_ONE_NAME, TEST_GAME_ONE_PASSWORD, TEST_USER_ONE, null);
 	
-	private static User createTestUser(String username, String password, String email) {
+	public static User createTestUser(String username, String password, String email) {
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
@@ -40,7 +40,7 @@ public class TestData {
 		return user;
 	}
 
-	private static Game createTestGame(String gameName, String password, User playerOne, User playerTwo) {
+	public static Game createTestGame(String gameName, String password, User playerOne, User playerTwo) {
 		Game game = new Game();
 		game.setName(gameName);
 		game.setPassword(password);

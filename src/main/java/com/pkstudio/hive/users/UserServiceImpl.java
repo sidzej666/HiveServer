@@ -1,26 +1,24 @@
 package com.pkstudio.hive.users;
 
+import static com.pkstudio.hive.users.User.MAX_EMAIL_LENGTH;
+import static com.pkstudio.hive.users.User.MAX_PASSWORD_LENGTH;
+import static com.pkstudio.hive.users.User.MAX_USERNAME_LENGTH;
+import static java.lang.String.format;
 import static org.springframework.util.StringUtils.isEmpty;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import org.apache.commons.validator.routines.EmailValidator;
-import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 
-import com.pkstudio.hive.exceptions.EmailRequiredException;
-import com.pkstudio.hive.exceptions.EmailTakenException;
-import com.pkstudio.hive.exceptions.InvalidEmailException;
-import com.pkstudio.hive.exceptions.PasswordRequiredException;
-import com.pkstudio.hive.exceptions.PasswordToShortException;
-import com.pkstudio.hive.exceptions.UsernameRequiredException;
-import com.pkstudio.hive.exceptions.UsernameTakenException;
 import com.pkstudio.hive.exceptions.rest.FieldError;
-import com.pkstudio.hive.exceptions.rest.ValidationError;
+import com.pkstudio.hive.exceptions.rest.ValidationException;
 
 @Service
 @Transactional
@@ -42,12 +40,23 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User createUser(User user) {
 		//TODO wrzucic validacje semantyczna i wstepne przygotowanie do klasy user??
-		validateAndTrimUsername(user);
-		validatePassword(user);
-		validateAndTrimEmail(user);
+		List<FieldError> validationErrors = new ArrayList<FieldError>();
 		
-		checkUsernameAvailability(user);
-		checkEmailAvailability(user);
+		trimAndValidateUsername(user, validationErrors);
+		validatePassword(user, validationErrors);
+		trimAndValidateEmail(user, validationErrors);
+		
+		if (!validationErrors.isEmpty()) {
+			throw new ValidationException(validationErrors);
+		}
+		
+		checkUsernameAvailability(user, validationErrors);
+		checkEmailAvailability(user, validationErrors);
+		
+		if (!validationErrors.isEmpty()) {
+			throw new ValidationException(validationErrors);
+		}
+		
 		setNewUserDefaultValues(user);
 		
 		usersDao.save(user);
@@ -55,9 +64,9 @@ public class UserServiceImpl implements UserService {
 		return usersDao.getById(user.getId());
 	}
 
-	private void checkEmailAvailability(User user) {
+	private void checkEmailAvailability(User user, List<FieldError> validationErrors) {
 		if (usersDao.findByEmail(user.getEmail()) != null) {
-			throw new EmailTakenException(user.getEmail());
+			validationErrors.add(new FieldError("email", String.format("email '%s' is already taken, choose another one", user.getEmail())));
 		}
 	}
 
@@ -69,38 +78,56 @@ public class UserServiceImpl implements UserService {
 		user.setAuthorities(roles);
 	}
 
-	private void checkUsernameAvailability(User user) {
+	private void checkUsernameAvailability(User user, List<FieldError> validationErrors) {
 		if (usersDao.findByUsername(user.getUsername()) != null) {
-			throw new UsernameTakenException(user.getUsername());
+			validationErrors.add(new FieldError("username", String.format("username '%s' is already taken, choose another one", user.getUsername())));
 		}
 	}
 
-	private void validateAndTrimEmail(User user) {
+	private void trimAndValidateEmail(User user, List<FieldError> validationErrors) {
+		if (user.getEmail() != null) {
+			user.setEmail(user.getEmail().trim());
+		}
 		if (isEmpty(user.getEmail())) {
-			throw new EmailRequiredException();
+			validationErrors.add(new FieldError("email", "email can't be empty"));
+			return;
 		}
-		
-		user.setEmail(user.getEmail().trim());
-		
+		if (user.getEmail().length() > User.MAX_EMAIL_LENGTH) {
+			validationErrors.add(new FieldError("email", String.format("email can't be longer than %s characters", MAX_EMAIL_LENGTH)));
+			return;
+		}
 		if (!emailValidator.isValid(user.getEmail())) {
-			throw new InvalidEmailException(user.getEmail());
+			validationErrors.add(new FieldError("email", "must be a valid email"));
+			return;
 		}
 	}
 
-	private void validatePassword(User user) {
+	private void validatePassword(User user, List<FieldError> validationErrors) {
 		if (isEmpty(user.getPassword())) {
-			throw new PasswordRequiredException();
+			validationErrors.add(new FieldError("password", "password can't be empty"));
+			return;
 		}
-		
 		if (user.getPassword().length() < 5) {
-			throw new PasswordToShortException();
+			validationErrors.add(new FieldError("password", "password need to be at least 5 characters long"));
+			return;
+		}
+		if (user.getPassword().length() > User.MAX_PASSWORD_LENGTH) {
+			validationErrors.add(new FieldError("password", String.format("password can't be longer than %s characters", MAX_PASSWORD_LENGTH)));
+			return;
 		}
 	}
 
-	private void validateAndTrimUsername(User user) {
-		if (isEmpty(user.getUsername())) {
-			throw new ValidationError(Lists.newArrayList(new FieldError("username", "username can't be empty")));
+	private void trimAndValidateUsername(User user, List<FieldError> validationErrors) {
+		if (user.getUsername() != null) {
+			user.setUsername(user.getUsername().trim());
 		}
-		user.setUsername(user.getUsername().trim());
+		if (isEmpty(user.getUsername())) {
+			validationErrors.add(new FieldError("username", "username can't be empty"));
+			return;
+		}
+		if (user.getUsername().length() > User.MAX_USERNAME_LENGTH) {
+			validationErrors.add(new FieldError("username", format("username can't be longer than %s characters", MAX_USERNAME_LENGTH)));
+			return;
+		}
 	}
 }

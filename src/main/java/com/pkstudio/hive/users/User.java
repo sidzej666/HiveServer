@@ -30,6 +30,10 @@ import com.sun.istack.internal.NotNull;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User extends GenericId implements UserDetails {
 
+	public static final int MAX_USERNAME_LENGTH = 20;
+	public static final int MAX_PASSWORD_LENGTH = 50;
+	public static final int MAX_EMAIL_LENGTH = 90;
+	
 	public User() {
 	}
 
@@ -79,7 +83,7 @@ public class User extends GenericId implements UserDetails {
 	@Transient
 	private String newPassword;
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, orphanRemoval = false)
 	@Cascade(CascadeType.SAVE_UPDATE)
 	private Set<UserAuthority> authorities;
 

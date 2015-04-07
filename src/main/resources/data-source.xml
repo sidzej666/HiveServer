@@ -30,6 +30,11 @@
 			<property name="password" value="${jdbc.password}" />
 		</bean>
 		
+		<jdbc:initialize-database data-source="dataSource" enabled="true" ignore-failures="DROPS">
+			<jdbc:script location="classpath:db/db-schema.sql" />
+			<jdbc:script location="classpath:db/production-init-data.sql" />
+		</jdbc:initialize-database>
+		
 		<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 			<property name="dataSource" ref="dataSource" />
 			<property name="packagesToScan" value="com.pkstudio" />
@@ -51,7 +56,7 @@
 			<property name="password" value="${test.jdbc.password}" />
 		</bean>
 		
-		<jdbc:initialize-database data-source="dataSource" enabled="true" ignore-failures="NONE">
+		<jdbc:initialize-database data-source="dataSource" enabled="true" ignore-failures="DROPS">
 			<jdbc:script location="classpath:db/db-schema.sql" />
 			<jdbc:script location="classpath:db/db-data.sql" />
 		</jdbc:initialize-database>

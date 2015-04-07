@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pkstudio.hive.games.GamesDao;
 import com.pkstudio.hive.users.UsersDao;
@@ -14,6 +15,7 @@ import com.pkstudio.hive.users.UsersDao;
 @RunWith(SpringJUnit4ClassRunner.class) 
 @ContextConfiguration(locations = { "classpath:**/spring-context.xml"})
 @ActiveProfiles("test")
+@Transactional
 public abstract class DatabaseTest {
 	
 	@Inject

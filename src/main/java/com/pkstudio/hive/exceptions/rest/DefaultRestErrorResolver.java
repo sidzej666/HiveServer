@@ -175,8 +175,8 @@ public class DefaultRestErrorResolver implements RestErrorResolver, MessageSourc
     }
 
     private List<FieldError> getValidationErrors(Exception ex) {
-    	if (ex instanceof ValidationError) {
-    		return ((ValidationError) ex).getFieldErrors();
+    	if (ex instanceof ValidationException) {
+    		return ((ValidationException) ex).getFieldErrors();
     	}
     	return null;
 	}

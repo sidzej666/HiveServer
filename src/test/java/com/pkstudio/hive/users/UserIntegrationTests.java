@@ -3,6 +3,7 @@ package com.pkstudio.hive.users;
 import static com.pkstudio.commons.TestData.TEST_USER_ONE;
 import static com.pkstudio.commons.TestData.TEST_USER_TWO;
 import static com.pkstudio.hive.security.TokenAuthenticationService.AUTH_HEADER_NAME;
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -28,6 +29,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.pkstudio.commons.IntegrationTest;
 import com.pkstudio.commons.TestData;
+import com.sun.glass.ui.Pixels.Format;
 
 public class UserIntegrationTests extends IntegrationTest {
 	
@@ -140,10 +142,10 @@ public class UserIntegrationTests extends IntegrationTest {
 	}
 	
 	@Test
-	public void createUser_shouldContainUsernameRequiredError() throws Exception {
+	public void createUser_shouldContainFieldErrorsForRequiredFields() throws Exception {
 		String username = "";
-		String password = "password";
-		String email = "newEmail@Email.com";
+		String password = "";
+		String email = "";
 		
 		String json = "{ \"username\":\"" + username + "\"," +
 					    "\"password\":\"" + password + "\"," +
@@ -158,8 +160,35 @@ public class UserIntegrationTests extends IntegrationTest {
 		  .andExpect(jsonPath("$.status").value(400))
 		  .andExpect(jsonPath("$.message").exists())
 		  .andExpect(jsonPath("$.developerMessage").exists())
-		  .andExpect(jsonPath("$.fieldErrors", hasSize(1)))
-		  .andExpect(jsonPath("$.fieldErrors[*].fieldName", containsInAnyOrder("username")))
-		  .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("username can't be empty")));
+		  .andExpect(jsonPath("$.fieldErrors", hasSize(3)))
+		  .andExpect(jsonPath("$.fieldErrors[*].fieldName", containsInAnyOrder("username", "email", "password")))
+		  .andExpect(jsonPath("$.fieldErrors[*].message",
+				  			  containsInAnyOrder("username can't be empty", "email can't be empty", "password can't be empty")));
+	}
+	
+	@Test
+	public void createUser_shouldContainUsernameAndEmailAlreadyTakenErrorFields() throws Exception {
+		String username = TEST_USER_ONE.getUsername();
+		String password = "password";
+		String email = TEST_USER_ONE.getEmail();
+		
+		String json = "{ \"username\":\"" + username + "\"," +
+					    "\"password\":\"" + password + "\"," +
+					    "\"email\":\"" + email + "\"}";
+		
+		mvc().perform(post("/rest/users")
+				.secure(true)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json))
+		  .andExpect(status().isBadRequest())
+		  .andExpect(jsonPath("$.code").value(400))
+		  .andExpect(jsonPath("$.status").value(400))
+		  .andExpect(jsonPath("$.message").exists())
+		  .andExpect(jsonPath("$.developerMessage").exists())
+		  .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
+		  .andExpect(jsonPath("$.fieldErrors[*].fieldName", containsInAnyOrder("username", "email")))
+		  .andExpect(jsonPath("$.fieldErrors[*].message",
+				  			  containsInAnyOrder(format("username '%s' is already taken, choose another one", username),
+				  					  			 format("email '%s' is already taken, choose another one", email))));
 	}
 }
