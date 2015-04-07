@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pkstudio.hive.exceptions.rest.ResourceNotFoundException;
 import com.pkstudio.hive.security.TokenAuthenticationService;
 import com.pkstudio.hive.security.UserAuthentication;
 
@@ -35,7 +36,11 @@ public class UserController {
 	
 	@RequestMapping(value = "/{id}", method = GET)
 	public User getUser(@PathVariable int id) {
-		return userService.getById(id);
+		User user = userService.getById(id);
+		if (user == null) {
+			throw new ResourceNotFoundException(String.format("user with id '%d' does not exist", id));
+		}
+		return user;
 	}
 	
 	@RequestMapping(value = "/me", method = GET)

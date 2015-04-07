@@ -21,7 +21,7 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
-	<beans profile="production">
+	<beans profile="default">
 		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 			destroy-method="close">
 			<property name="driverClassName" value="${jdbc.driverClassName}" />
@@ -42,7 +42,7 @@
 		</bean>
 	</beans>
 	
-	<beans profile="default">
+	<beans profile="test">
 		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 			destroy-method="close">
 			<property name="driverClassName" value="${test.jdbc.driverClassName}" />
@@ -51,7 +51,7 @@
 			<property name="password" value="${test.jdbc.password}" />
 		</bean>
 		
-		<jdbc:initialize-database data-source="dataSource" enabled="true" ignore-failures="ALL">
+		<jdbc:initialize-database data-source="dataSource" enabled="true" ignore-failures="NONE">
 			<jdbc:script location="classpath:db/db-schema.sql" />
 			<jdbc:script location="classpath:db/db-data.sql" />
 		</jdbc:initialize-database>

@@ -24,11 +24,9 @@ import com.pkstudio.hive.security.TokenAuthenticationService;
 import com.pkstudio.hive.security.TokenHandler;
 import com.pkstudio.hive.users.User;
 
-@RunWith(SpringJUnit4ClassRunner.class) 
-@ContextConfiguration(locations = { "classpath:**/spring-context.xml"})
 @WebAppConfiguration("classpath:**/mvc-dispatcher-servlet.xml")
 @Transactional
-public class IntegrationTest {
+public class IntegrationTest extends DatabaseTest {
 
 	@Inject
 	private WebApplicationContext webAppContext;
@@ -37,7 +35,7 @@ public class IntegrationTest {
 	private FilterChainProxy springSecurityFilterChain;
 	
 	@Inject
-	private TokenHandler tokenHandler; 
+	private TokenHandler tokenHandler;
 	
 	private static MockMvc mvc;
     
@@ -58,6 +56,10 @@ public class IntegrationTest {
     	httpHeaders.add(AUTH_HEADER_NAME,
     			tokenHandler.createTokenForUser(new User(userId, username, tenDaysAfterNow())));
     	return httpHeaders;
+    }
+    
+    protected HttpHeaders authenticationHeaders(User user) {
+    	return authenticationHeaders(user.getId(), user.getUsername());
     }
     
     private Date tenDaysAfterNow() {

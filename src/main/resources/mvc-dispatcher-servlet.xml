@@ -59,6 +59,7 @@
    				<entry key="org.springframework.security.authentication.BadCredentialsException" value="401, bad credentials"/>
    				<entry key="org.springframework.security.access.AccessDeniedException" value="403, access denied"/>
      			<entry key="com.pkstudio.hive.exceptions.rest.ResourceNotFoundException" value="404, _exmsg"/>
+     			<entry key="com.pkstudio.hive.exceptions.rest.ValidationError" value="400, validation error"/>
      			<entry key="Throwable" value="500, error.internal"/>
    			</map>
 		</property>

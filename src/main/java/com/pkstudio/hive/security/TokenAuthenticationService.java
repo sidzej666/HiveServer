@@ -38,7 +38,11 @@ public class TokenAuthenticationService {
 		if (token != null) {
 			final User user = tokenHandler.parseUserFromToken(token);
 			if (user != null) {
-				return new UserAuthentication(usersDao.findByUsername(user.getUsername()));
+				User userFromDatabase = usersDao.findByUsername(user.getUsername());
+				if (userFromDatabase == null) {
+					return null;
+				}
+				return new UserAuthentication(userFromDatabase);
 			}
 		}
 		return null;

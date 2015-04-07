@@ -1,8 +1,10 @@
 package com.pkstudio.hive.users;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -202,5 +204,14 @@ public class User extends GenericId implements UserDetails {
 	
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@JsonIgnore
+	public List<String> getRolesInStringFormat() {
+		List<String> roles = new ArrayList<String>();
+		for (UserAuthority userAuthority: authorities) {
+			roles.add(userAuthority.getAuthority());
+		}
+		return roles;
 	}
 }

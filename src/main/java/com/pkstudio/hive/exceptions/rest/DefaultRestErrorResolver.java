@@ -146,7 +146,7 @@ public class DefaultRestErrorResolver implements RestErrorResolver, MessageSourc
 
     @Override
     public RestError resolveError(ServletWebRequest request, Object handler, Exception ex) {
-
+    	
         RestError template = getRestErrorTemplate(ex);
         if (template == null) {
             return null;
@@ -166,11 +166,22 @@ public class DefaultRestErrorResolver implements RestErrorResolver, MessageSourc
         if (msg != null) {
             builder.setDeveloperMessage(msg);
         }
-
+        List<FieldError> validationErrors = getValidationErrors(ex);
+        if (validationErrors != null) {
+        	builder.setFieldErrors(validationErrors);
+        }
+        
         return builder.build();
     }
 
-    protected int getStatusValue(RestError template, ServletWebRequest request, Exception ex) {
+    private List<FieldError> getValidationErrors(Exception ex) {
+    	if (ex instanceof ValidationError) {
+    		return ((ValidationError) ex).getFieldErrors();
+    	}
+    	return null;
+	}
+
+	protected int getStatusValue(RestError template, ServletWebRequest request, Exception ex) {
         return template.getStatus().value();
     }
 

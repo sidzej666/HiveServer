@@ -15,7 +15,8 @@
  */
 package com.pkstudio.hive.exceptions.rest;
 
-import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ObjectUtils;
@@ -36,9 +37,10 @@ public class RestError {
 	private final String message;
 	private final String developerMessage;
     private final String moreInfoUrl;
+    private final List<FieldError> fieldErrors;
     private final Throwable throwable;
 
-    public RestError(HttpStatus status, int code, String message, String developerMessage, String moreInfoUrl, Throwable throwable) {
+    public RestError(HttpStatus status, int code, String message, String developerMessage, String moreInfoUrl, Throwable throwable, List<FieldError> fieldErrors) {
         if (status == null) {
             throw new NullPointerException("HttpStatus argument cannot be null.");
         }
@@ -48,6 +50,7 @@ public class RestError {
         this.developerMessage = developerMessage;
         this.moreInfoUrl = moreInfoUrl;
         this.throwable = throwable;
+        this.fieldErrors = fieldErrors;
     }
 
     public HttpStatus getStatus() {
@@ -112,7 +115,11 @@ public class RestError {
     	return jsonString;
     }
 
-    public static class Builder {
+    public List<FieldError> getFieldErrors() {
+		return fieldErrors;
+	}
+
+	public static class Builder {
 
         private HttpStatus status;
         private int code;
@@ -120,6 +127,7 @@ public class RestError {
         private String developerMessage;
         private String moreInfoUrl;
         private Throwable throwable;
+        private List<FieldError> fieldErrors;
 
         public Builder() {
         }
@@ -158,12 +166,17 @@ public class RestError {
             this.throwable = throwable;
             return this;
         }
+        
+        public Builder setFieldErrors(List<FieldError> fieldErrors) {
+        	this.fieldErrors = fieldErrors;
+        	return this;
+        }
 
         public RestError build() {
             if (this.status == null) {
                 this.status = HttpStatus.INTERNAL_SERVER_ERROR;
             }
-            return new RestError(this.status, this.code, this.message, this.developerMessage, this.moreInfoUrl, this.throwable);
+            return new RestError(this.status, this.code, this.message, this.developerMessage, this.moreInfoUrl, this.throwable, this.fieldErrors);
         }
     }
 }

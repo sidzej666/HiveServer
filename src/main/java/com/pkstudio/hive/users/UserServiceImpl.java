@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import org.apache.commons.validator.routines.EmailValidator;
+import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 
 import com.pkstudio.hive.exceptions.EmailRequiredException;
@@ -18,6 +19,8 @@ import com.pkstudio.hive.exceptions.PasswordRequiredException;
 import com.pkstudio.hive.exceptions.PasswordToShortException;
 import com.pkstudio.hive.exceptions.UsernameRequiredException;
 import com.pkstudio.hive.exceptions.UsernameTakenException;
+import com.pkstudio.hive.exceptions.rest.FieldError;
+import com.pkstudio.hive.exceptions.rest.ValidationError;
 
 @Service
 @Transactional
@@ -38,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User createUser(User user) {
-		
+		//TODO wrzucic validacje semantyczna i wstepne przygotowanie do klasy user??
 		validateAndTrimUsername(user);
 		validatePassword(user);
 		validateAndTrimEmail(user);
@@ -96,7 +99,7 @@ public class UserServiceImpl implements UserService {
 
 	private void validateAndTrimUsername(User user) {
 		if (isEmpty(user.getUsername())) {
-			throw new UsernameRequiredException();
+			throw new ValidationError(Lists.newArrayList(new FieldError("username", "username can't be empty")));
 		}
 		user.setUsername(user.getUsername().trim());
 	}

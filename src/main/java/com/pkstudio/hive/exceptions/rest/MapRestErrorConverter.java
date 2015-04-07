@@ -15,10 +15,11 @@
  */
 package com.pkstudio.hive.exceptions.rest;
 
-import org.springframework.http.HttpStatus;
-
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.springframework.http.HttpStatus;
 
 /**
  * Simple {@code RestErrorConverter} implementation that creates a new Map instance based on the specified RestError
@@ -70,12 +71,14 @@ public class MapRestErrorConverter implements RestErrorConverter<Map> {
     private static final String DEFAULT_MESSAGE_KEY = "message";
     private static final String DEFAULT_DEVELOPER_MESSAGE_KEY = "developerMessage";
     private static final String DEFAULT_MORE_INFO_URL_KEY = "moreInfoUrl";
+    private static final String DEFAULT_FIELD_ERRORS_KEY = "fieldErrors";
 
     private String statusKey = DEFAULT_STATUS_KEY;
     private String codeKey = DEFAULT_CODE_KEY;
     private String messageKey = DEFAULT_MESSAGE_KEY;
     private String developerMessageKey = DEFAULT_DEVELOPER_MESSAGE_KEY;
     private String moreInfoUrlKey = DEFAULT_MORE_INFO_URL_KEY;
+    private String fieldErrorsKey = DEFAULT_FIELD_ERRORS_KEY;
 
     @Override
     public Map convert(RestError re) {
@@ -101,6 +104,11 @@ public class MapRestErrorConverter implements RestErrorConverter<Map> {
         String moreInfoUrl = re.getMoreInfoUrl();
         if (moreInfoUrl != null) {
             m.put(getMoreInfoUrlKey(), moreInfoUrl);
+        }
+        
+        List<FieldError> fieldErrors = re.getFieldErrors();
+        if (fieldErrors != null) {
+        	m.put(getFieldErrorsKey(), fieldErrors);
         }
 
         return m;
@@ -149,4 +157,12 @@ public class MapRestErrorConverter implements RestErrorConverter<Map> {
     public void setMoreInfoUrlKey(String moreInfoUrlKey) {
         this.moreInfoUrlKey = moreInfoUrlKey;
     }
+
+	public String getFieldErrorsKey() {
+		return fieldErrorsKey;
+	}
+
+	public void setFieldErrorsKey(String fieldErrorsKey) {
+		this.fieldErrorsKey = fieldErrorsKey;
+	}
 }

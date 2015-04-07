@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PostAuthorize;
 public interface UserService {
 	
 	@Secured("USER")
-	@PostAuthorize("returnObject.username == principal")
+	@PostAuthorize("returnObject == null or returnObject.username == principal")
 	public User getById(int id);
 	
 	@Transactional

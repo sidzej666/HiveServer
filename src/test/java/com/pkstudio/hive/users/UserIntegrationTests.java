@@ -1,24 +1,33 @@
 package com.pkstudio.hive.users;
 
+import static com.pkstudio.commons.TestData.TEST_USER_ONE;
+import static com.pkstudio.commons.TestData.TEST_USER_TWO;
 import static com.pkstudio.hive.security.TokenAuthenticationService.AUTH_HEADER_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.inject.Inject;
+import javax.swing.text.AbstractDocument.Content;
 
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.pkstudio.commons.IntegrationTest;
+import com.pkstudio.commons.TestData;
 
 public class UserIntegrationTests extends IntegrationTest {
 	
@@ -27,50 +36,72 @@ public class UserIntegrationTests extends IntegrationTest {
 	
 	@Test
 	public void getUserById_shouldReturnUser() throws Exception {
-		mvc().perform(get("/rest/users/1")
+		mvc().perform(get("/rest/users/" + TEST_USER_ONE.getId())
 				  .secure(true)
-				  .headers(authenticationHeaders(1, "pawel")))
+				  .headers(authenticationHeaders(TEST_USER_ONE)))
 		 .andExpect(status().isOk())
-		 .andExpect(jsonPath("id").value(1))
-		 .andExpect(jsonPath("username").value("pawel"))
-		 .andExpect(jsonPath("roles").isArray())
-		 .andExpect(jsonPath("roles").value(contains(UserRole.USER.toString())))
-		 .andExpect(jsonPath("password").doesNotExist());
+		 .andExpect(jsonPath("$.id").value(TEST_USER_ONE.getId()))
+		 .andExpect(jsonPath("$.username").value(TEST_USER_ONE.getUsername()))
+		 .andExpect(jsonPath("$.roles[*]").value(TEST_USER_ONE.getRolesInStringFormat().get(0)))
+		 .andExpect(jsonPath("$.password").doesNotExist());
 	}
 	
 	@Test
 	public void getUserById_shouldReturnUnauthorizedWhenNoAuthenticationToken() throws Exception {
-		mvc().perform(get("/rest/users/1")
+		mvc().perform(get("/rest/users/" + TEST_USER_ONE.getId())
 					  .secure(true))
-			 .andExpect(status().isUnauthorized());
+			 .andExpect(status().isUnauthorized())
+			 .andExpect(jsonPath("$.code").value(401))
+			 .andExpect(jsonPath("$.status").value(401))
+			 .andExpect(jsonPath("$.message").exists())
+			 .andExpect(jsonPath("$.developerMessage").exists());
 	}
 	
 	@Test
 	public void getUserById_shouldReturnForbiddenForDifferentUser() throws Exception {
-		mvc().perform(get("/rest/users/2")
+		mvc().perform(get("/rest/users/" + TEST_USER_TWO.getId())
 					  .secure(true)
-					  .headers(authenticationHeaders(1, "pawel")))
-			 .andExpect(status().isForbidden());
+					  .headers(authenticationHeaders(TEST_USER_ONE)))
+			 .andExpect(status().isForbidden())
+			 .andExpect(jsonPath("$.code").value(403))
+			 .andExpect(jsonPath("$.status").value(403))
+			 .andExpect(jsonPath("$.message").exists())
+			 .andExpect(jsonPath("$.developerMessage").exists());
+	}
+	
+	@Test
+	public void getUserById_shouldReturnResourceNotFoundForNonExistentUser() throws Exception {
+		mvc().perform(get("/rest/users/" + (TEST_USER_TWO.getId() + 1))
+				  .secure(true)
+				  .headers(authenticationHeaders(TEST_USER_ONE)))
+		.andExpect(status().isNotFound())
+		.andExpect(jsonPath("$.code").value(404))
+		.andExpect(jsonPath("$.status").value(404))
+		.andExpect(jsonPath("$.message").exists())
+		.andExpect(jsonPath("$.developerMessage").exists());
 	}
 	
 	@Test
 	public void getMe_shouldReturnUnauthorizedWhenNoAuthenticationToken() throws Exception {
 		mvc().perform(get("/rest/users/me")
 				  .secure(true))
-		 .andExpect(status().isUnauthorized());
+			 .andExpect(status().isUnauthorized())
+			 .andExpect(jsonPath("$.code").value(401))
+			 .andExpect(jsonPath("$.status").value(401))
+			 .andExpect(jsonPath("$.message").exists())
+			 .andExpect(jsonPath("$.developerMessage").exists());
 	}
 	
 	@Test
 	public void getMe_shouldReturnCurrentUser() throws Exception {
 		mvc().perform(get("/rest/users/me")
 				  .secure(true)
-				  .headers(authenticationHeaders(1, "pawel")))
+				  .headers(authenticationHeaders(TEST_USER_ONE)))
 		 .andExpect(status().isOk())
-		 .andExpect(jsonPath("id").value(1))
-		 .andExpect(jsonPath("username").value("pawel"))
-		 .andExpect(jsonPath("roles").isArray())
-		 .andExpect(jsonPath("roles").value(contains(UserRole.USER.toString())))
-		 .andExpect(jsonPath("password").doesNotExist());
+		 .andExpect(jsonPath("$.id").value(TEST_USER_ONE.getId()))
+		 .andExpect(jsonPath("$.username").value(TEST_USER_ONE.getUsername()))
+		 .andExpect(jsonPath("$.roles[*]").value(TEST_USER_ONE.getRolesInStringFormat().get(0)))
+		 .andExpect(jsonPath("$.password").doesNotExist());
 	}
 
 	@Test
@@ -88,24 +119,47 @@ public class UserIntegrationTests extends IntegrationTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(json))
 		  .andExpect(status().isCreated())
-		  .andExpect(jsonPath("id").exists())
-		  .andExpect(jsonPath("password").doesNotExist())
-		  .andExpect(jsonPath("email").value(is(email)))
-		  .andExpect(jsonPath("roles").isArray())
-		  .andExpect(jsonPath("roles").value(contains(UserRole.USER.toString())))
+		  .andExpect(jsonPath("$.id").exists())
+		  .andExpect(jsonPath("$.password").doesNotExist())
+		  .andExpect(jsonPath("$.email").value(is(email)))
+		  .andExpect(jsonPath("$.roles[*]").value(contains(UserRole.USER.toString())))
 		  .andExpect(header().string(LOCATION, containsString("/rest/users/")))
 		  .andExpect(header().string(AUTH_HEADER_NAME, containsString(".")));
 		
-		User user = usersDao.findByUsername("username");
+		User user = usersDao.findByUsername(username);
 		assertThat(user.getAuthorities().size()).isEqualTo(1);
 		assertThat(user.hasRole(UserRole.USER)).isTrue();
 		assertThat(user.getEmail()).isEqualTo(email);
 		assertThat(user.getPassword()).isEqualTo(password);
 		assertThat(user.getUsername()).isEqualTo(username);
-		assertThat(user.getId()).isEqualTo(3);
+		assertThat(user.getId()).isEqualTo(TEST_USER_TWO.getId() + 1);
 		assertThat(user.isAccountNonExpired()).isTrue();
 		assertThat(user.isAccountNonLocked()).isTrue();
 		assertThat(user.isCredentialsNonExpired()).isTrue();
 		assertThat(user.isEnabled()).isTrue();
+	}
+	
+	@Test
+	public void createUser_shouldContainUsernameRequiredError() throws Exception {
+		String username = "";
+		String password = "password";
+		String email = "newEmail@Email.com";
+		
+		String json = "{ \"username\":\"" + username + "\"," +
+					    "\"password\":\"" + password + "\"," +
+					    "\"email\":\"" + email + "\"}";
+		
+		mvc().perform(post("/rest/users")
+				.secure(true)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json))
+		  .andExpect(status().isBadRequest())
+		  .andExpect(jsonPath("$.code").value(400))
+		  .andExpect(jsonPath("$.status").value(400))
+		  .andExpect(jsonPath("$.message").exists())
+		  .andExpect(jsonPath("$.developerMessage").exists())
+		  .andExpect(jsonPath("$.fieldErrors", hasSize(1)))
+		  .andExpect(jsonPath("$.fieldErrors[*].fieldName", containsInAnyOrder("username")))
+		  .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("username can't be empty")));
 	}
 }
