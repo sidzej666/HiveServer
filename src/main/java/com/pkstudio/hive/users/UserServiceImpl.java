@@ -3,6 +3,7 @@ package com.pkstudio.hive.users;
 import static com.pkstudio.hive.users.User.MAX_EMAIL_LENGTH;
 import static com.pkstudio.hive.users.User.MAX_PASSWORD_LENGTH;
 import static com.pkstudio.hive.users.User.MAX_USERNAME_LENGTH;
+import static com.pkstudio.hive.users.User.MIN_PASSWORD_LENGTH;
 import static java.lang.String.format;
 import static org.springframework.util.StringUtils.isEmpty;
 
@@ -66,7 +67,8 @@ public class UserServiceImpl implements UserService {
 
 	private void checkEmailAvailability(User user, List<FieldError> validationErrors) {
 		if (usersDao.findByEmail(user.getEmail()) != null) {
-			validationErrors.add(new FieldError("email", String.format("email '%s' is already taken, choose another one", user.getEmail())));
+			validationErrors.add(new FieldError("email",
+					format("email '%s' is already taken, choose another one", user.getEmail()), "EMAIL_TAKEN"));
 		}
 	}
 
@@ -80,7 +82,8 @@ public class UserServiceImpl implements UserService {
 
 	private void checkUsernameAvailability(User user, List<FieldError> validationErrors) {
 		if (usersDao.findByUsername(user.getUsername()) != null) {
-			validationErrors.add(new FieldError("username", String.format("username '%s' is already taken, choose another one", user.getUsername())));
+			validationErrors.add(new FieldError("username",
+					format("username '%s' is already taken, choose another one", user.getUsername()), "USERNAME_TAKEN"));
 		}
 	}
 
@@ -89,30 +92,33 @@ public class UserServiceImpl implements UserService {
 			user.setEmail(user.getEmail().trim());
 		}
 		if (isEmpty(user.getEmail())) {
-			validationErrors.add(new FieldError("email", "email can't be empty"));
+			validationErrors.add(new FieldError("email", "email can't be empty", "EMAIL_EMPTY"));
 			return;
 		}
 		if (user.getEmail().length() > User.MAX_EMAIL_LENGTH) {
-			validationErrors.add(new FieldError("email", String.format("email can't be longer than %s characters", MAX_EMAIL_LENGTH)));
+			validationErrors.add(new FieldError("email",
+					format("email can't be longer than %s characters", MAX_EMAIL_LENGTH), "EMAIL_TO_LONG"));
 			return;
 		}
 		if (!emailValidator.isValid(user.getEmail())) {
-			validationErrors.add(new FieldError("email", "must be a valid email"));
+			validationErrors.add(new FieldError("email", "must be a valid email", "EMAIL_INVALID"));
 			return;
 		}
 	}
 
 	private void validatePassword(User user, List<FieldError> validationErrors) {
 		if (isEmpty(user.getPassword())) {
-			validationErrors.add(new FieldError("password", "password can't be empty"));
+			validationErrors.add(new FieldError("password", "password can't be empty", "PASSWORD_EMPTY"));
 			return;
 		}
 		if (user.getPassword().length() < 5) {
-			validationErrors.add(new FieldError("password", "password need to be at least 5 characters long"));
+			validationErrors.add(new FieldError("password",
+					format("password need to be at least %s characters long", MIN_PASSWORD_LENGTH), "PASSWORD_TO_SHORT"));
 			return;
 		}
 		if (user.getPassword().length() > User.MAX_PASSWORD_LENGTH) {
-			validationErrors.add(new FieldError("password", String.format("password can't be longer than %s characters", MAX_PASSWORD_LENGTH)));
+			validationErrors.add(new FieldError("password",
+					format("password can't be longer than %s characters", MAX_PASSWORD_LENGTH), "PASSWORD_TO_LONG"));
 			return;
 		}
 	}
@@ -122,11 +128,12 @@ public class UserServiceImpl implements UserService {
 			user.setUsername(user.getUsername().trim());
 		}
 		if (isEmpty(user.getUsername())) {
-			validationErrors.add(new FieldError("username", "username can't be empty"));
+			validationErrors.add(new FieldError("username", "username can't be empty", "USERNAME_EMPTY"));
 			return;
 		}
 		if (user.getUsername().length() > User.MAX_USERNAME_LENGTH) {
-			validationErrors.add(new FieldError("username", format("username can't be longer than %s characters", MAX_USERNAME_LENGTH)));
+			validationErrors.add(new FieldError("username",
+					format("username can't be longer than %s characters", MAX_USERNAME_LENGTH), "USERNAME_TO_LONG"));
 			return;
 		}
 	}

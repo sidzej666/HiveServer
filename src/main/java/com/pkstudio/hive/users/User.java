@@ -31,6 +31,7 @@ import com.sun.istack.internal.NotNull;
 public class User extends GenericId implements UserDetails {
 
 	public static final int MAX_USERNAME_LENGTH = 20;
+	public static final int MIN_PASSWORD_LENGTH = 5;
 	public static final int MAX_PASSWORD_LENGTH = 50;
 	public static final int MAX_EMAIL_LENGTH = 90;
 	
