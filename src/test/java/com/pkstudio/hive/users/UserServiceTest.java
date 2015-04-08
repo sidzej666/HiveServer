@@ -1,8 +1,10 @@
 package com.pkstudio.hive.users;
 
+import static com.pkstudio.hive.exceptions.FieldErrorFactory.newFieldError;
 import static com.pkstudio.hive.users.User.MAX_EMAIL_LENGTH;
 import static com.pkstudio.hive.users.User.MAX_PASSWORD_LENGTH;
 import static com.pkstudio.hive.users.User.MAX_USERNAME_LENGTH;
+import static com.pkstudio.hive.users.User.MIN_PASSWORD_LENGTH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -348,51 +350,45 @@ public class UserServiceTest extends TestBase {
 	}
 	
 	private void containsUsernameCantBeEmptyFieldError(List<FieldError> fieldErrors) {
-		assertThat(fieldErrors.contains(new FieldError("username", "username can't be empty", "USERNAME_EMPTY"))).isTrue();
+		assertThat(fieldErrors.contains(newFieldError(UserValidationError.USERNAME_EMPTY))).isTrue();
 	}
 	
 	private void containsUsernameToLongFieldError(List<FieldError> fieldErrors) {
-		assertThat(fieldErrors.contains(new FieldError("username",
-						String.format("username can't be longer than %s characters", MAX_USERNAME_LENGTH), "USERNAME_TO_LONG"))).isTrue();
+		assertThat(fieldErrors.contains(newFieldError(UserValidationError.USERNAME_TO_LONG, MAX_USERNAME_LENGTH))).isTrue();
 	}
 	
 	private void containsUsernameAlreadyTakenErrorField(
 			List<FieldError> fieldErrors, String username) {
-		assertThat(fieldErrors.contains(new FieldError("username",
-						String.format("username '%s' is already taken, choose another one", username), "USERNAME_TAKEN"))).isTrue();
+		assertThat(fieldErrors.contains(newFieldError(UserValidationError.USERNAME_TAKEN, username))).isTrue();
 	}
 	
 	private void containsPasswordCantBeEmptyFieldError( List<FieldError> fieldErrors) {
-		assertThat(fieldErrors.contains(new FieldError("password", "password can't be empty", "PASSWORD_EMPTY"))).isTrue();
+		assertThat(fieldErrors.contains(newFieldError(UserValidationError.PASSWORD_EMPTY))).isTrue();
 	}
 	
 	private void containsPasswordToShortFieldError(List<FieldError> fieldErrors) {
-		assertThat(fieldErrors.contains(new FieldError("password",
-				"password need to be at least 5 characters long", "PASSWORD_TO_SHORT"))).isTrue();
+		assertThat(fieldErrors.contains(newFieldError(UserValidationError.PASSWORD_TO_SHORT, MIN_PASSWORD_LENGTH))).isTrue();
 	}
 	
 	private void containsPasswordToLongFieldError(List<FieldError> fieldErrors) {
-		assertThat(fieldErrors.contains(new FieldError("password",
-						String.format("password can't be longer than %s characters", MAX_PASSWORD_LENGTH), "PASSWORD_TO_LONG"))).isTrue();
+		assertThat(fieldErrors.contains(newFieldError(UserValidationError.PASSWORD_TO_LONG, MAX_PASSWORD_LENGTH))).isTrue();
 	}
 
 	private void containsEmailCantBeEmptyFieldError(List<FieldError> fieldErrors) {
-		assertThat(fieldErrors.contains(new FieldError("email", "email can't be empty", "EMAIL_EMPTY"))).isTrue();
+		assertThat(fieldErrors.contains(newFieldError(UserValidationError.EMAIL_EMPTY))).isTrue();
 	}
 	
 	private void containsInvalidEmailErrorField(List<FieldError> fieldErrors) {
-		assertThat(fieldErrors.contains(new FieldError("email", "must be a valid email", "EMAIL_INVALID"))).isTrue();
+		assertThat(fieldErrors.contains(newFieldError(UserValidationError.EMAIL_INVALID))).isTrue();
 	}
 	
 	private void containsToLongEmailErrorField(List<FieldError> fieldErrors) {
-		assertThat(fieldErrors.contains(new FieldError("email",
-				String.format("email can't be longer than %s characters", MAX_EMAIL_LENGTH), "EMAIL_TO_LONG"))).isTrue();
+		assertThat(fieldErrors.contains(newFieldError(UserValidationError.EMAIL_TO_LONG, MAX_EMAIL_LENGTH))).isTrue();
 	}
 	
 	private void containsEmailAlreadyTakenErrorField(
 			List<FieldError> fieldErrors, String email) {
-		assertThat(fieldErrors.contains(new FieldError("email",
-				String.format("email '%s' is already taken, choose another one", email), "EMAIL_TAKEN"))).isTrue();
+		assertThat(fieldErrors.contains(newFieldError(UserValidationError.EMAIL_TAKEN, email))).isTrue();
 	}
 	
 	private String toLongUsername() {

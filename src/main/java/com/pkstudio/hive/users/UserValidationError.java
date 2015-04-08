@@ -2,37 +2,48 @@ package com.pkstudio.hive.users;
 
 import static com.pkstudio.hive.users.UserValidationError.Fields.*;
 
-public enum UserValidationError {
+import com.pkstudio.hive.exceptions.ValidationError;
+
+public enum UserValidationError implements ValidationError {
 	
-	USERNAME_EMPTY(USERNAME_FIELD, "Username can't be empty"),
-	USERNAME_TO_LONG(USERNAME_FIELD, "Username is to long, can contain maximum %s characters"),
-	USERNAME_TAKEN(USERNAME_FIELD, "Username '%s' is already taken, choose another one"),
+	USERNAME_EMPTY(USERNAME_FIELD, "validation.createUser.username.empty"),
+	USERNAME_TO_LONG(USERNAME_FIELD, "validation.createUser.username.toLong"),
+	USERNAME_TAKEN(USERNAME_FIELD, "validation.createUser.username.taken"),
 	
-	PASSWORD_EMPTY(PASSWORD_FIELD, "Password can't be empty"),
-	PASSWORD_TO_SHORT(PASSWORD_FIELD, "Password is to short, must contain minimum %s characters"),
+	PASSWORD_EMPTY(PASSWORD_FIELD, "validation.createUser.password.empty"),
+	PASSWORD_TO_SHORT(PASSWORD_FIELD, "validation.createUser.password.toShort"),
+	PASSWORD_TO_LONG(PASSWORD_FIELD, "validation.createUser.password.toLong"),
 	
-	EMAIL_EMPTY(EMAIL_FIELD, "Email can't be empty"),
-	EMAIL_INVALID(EMAIL_FIELD, "Provided email is not a valid email"),
-	EMAIL_TO_LONG(EMAIL_FIELD, "Email is to long, can contain maximum %s characters")
+	EMAIL_EMPTY(EMAIL_FIELD, "validation.createUser.email.empty"),
+	EMAIL_INVALID(EMAIL_FIELD, "validation.createUser.email.invalid"),
+	EMAIL_TO_LONG(EMAIL_FIELD, "validation.createUser.email.toLong"),
+	EMAIL_TAKEN(EMAIL_FIELD, "validation.createUser.email.taken")
 	;
 	
 	private final String field;
-	private final String message;
+	private final String messageKey;
 	
-	UserValidationError(String field, String message) {
+	UserValidationError(String field, String messageKey) {
 		this.field = field;
-		this.message = message;
+		this.messageKey = messageKey;
 	}
 	
+	@Override
 	public String getField() {
 		return field;
 	}
 
-	public String getMessage() {
-		return message;
+	@Override
+	public String getMessageKey() {
+		return messageKey;
+	}
+	
+	@Override
+	public String getCode() {
+		return this.toString();
 	}
 
-	class Fields {
+	public class Fields {
 		static final String PASSWORD_FIELD = "password";
 		static final String USERNAME_FIELD = "username";
 		static final String EMAIL_FIELD = "email";

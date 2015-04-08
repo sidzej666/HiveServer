@@ -1,5 +1,6 @@
 package com.pkstudio.hive.exceptions.rest;
 
+
 public class FieldError {
 	private final String fieldName;
 	private final String message;
