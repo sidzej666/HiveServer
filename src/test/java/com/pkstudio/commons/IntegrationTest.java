@@ -24,7 +24,7 @@ import com.pkstudio.hive.security.TokenAuthenticationService;
 import com.pkstudio.hive.security.TokenHandler;
 import com.pkstudio.hive.users.User;
 
-@WebAppConfiguration("classpath:**/mvc-dispatcher-servlet.xml")
+@WebAppConfiguration("classpath:mvc-dispatcher-servlet.xml")
 public class IntegrationTest extends DatabaseTest {
 
 	@Inject

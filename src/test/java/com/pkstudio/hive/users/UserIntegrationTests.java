@@ -13,23 +13,16 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.inject.Inject;
-import javax.swing.text.AbstractDocument.Content;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.pkstudio.commons.IntegrationTest;
-import com.pkstudio.commons.TestData;
-import com.sun.glass.ui.Pixels.Format;
 
 public class UserIntegrationTests extends IntegrationTest {
 	
@@ -163,7 +156,7 @@ public class UserIntegrationTests extends IntegrationTest {
 		  .andExpect(jsonPath("$.fieldErrors", hasSize(3)))
 		  .andExpect(jsonPath("$.fieldErrors[*].fieldName", containsInAnyOrder("username", "email", "password")))
 		  .andExpect(jsonPath("$.fieldErrors[*].message",
-				  			  containsInAnyOrder("username can't be empty", "email can't be empty", "password can't be empty")));
+				  			  containsInAnyOrder("Username can't be empty", "Email can't be empty", "Password can't be empty")));
 	}
 	
 	@Test
@@ -188,7 +181,7 @@ public class UserIntegrationTests extends IntegrationTest {
 		  .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
 		  .andExpect(jsonPath("$.fieldErrors[*].fieldName", containsInAnyOrder("username", "email")))
 		  .andExpect(jsonPath("$.fieldErrors[*].message",
-				  			  containsInAnyOrder(format("username '%s' is already taken, choose another one", username),
-				  					  			 format("email '%s' is already taken, choose another one", email))));
+				  			  containsInAnyOrder(format("Username '%s' is already taken", username),
+				  					  			 format("Email '%s' is already taken", email))));
 	}
 }

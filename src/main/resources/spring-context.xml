@@ -9,6 +9,7 @@
 	
 	<context:property-placeholder location="classpath:**/jdbc.properties, classpath:**/application.properties,
 											classpath:**/exceptions.properties" />
+	<import resource="/message-source.xml"/>
 	<import resource="/mvc-dispatcher-servlet.xml"/>
 	<import resource="/data-source.xml"/>
 	<import resource="/spring-security.xml"/>

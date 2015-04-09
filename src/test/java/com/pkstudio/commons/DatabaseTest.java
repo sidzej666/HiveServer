@@ -13,7 +13,7 @@ import com.pkstudio.hive.games.GamesDao;
 import com.pkstudio.hive.users.UsersDao;
 
 @RunWith(SpringJUnit4ClassRunner.class) 
-@ContextConfiguration(locations = { "classpath:**/spring-context.xml"})
+@ContextConfiguration(locations = { "classpath:spring-context.xml"})
 @ActiveProfiles("test")
 @Transactional
 public abstract class DatabaseTest {
