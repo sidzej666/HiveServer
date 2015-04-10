@@ -24,3 +24,4 @@ http://www.future-processing.pl/blog/exploring-spring-boot-and-spring-security-c
 http://blog.zenika.com/index.php?post/2013/01/15/REST-Web-Services-testing-with-Spring-MVC
 http://azagorneanu.blogspot.com/2013/06/hateoas-using-spring-framework.html
 http://www.mkyong.com/hibernate/cascade-jpa-hibernate-annotation-common-mistake/
+http://likesalmon.net/enable-e2e-testing-with-yeoman-generator-angular/
